@@ -2,10 +2,22 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+| This file is the spine. Feature routes are organised into separate files
+| and loaded here. Do not put feature logic directly into this file.
+|--------------------------------------------------------------------------
+*/
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('dashboard', 'dashboard')->name('dashboard');
-});
+// Public home
+Route::get('/', function () {
+    return view('home');
+})->name('home');
 
-require __DIR__.'/settings.php';
+// Feature route files
+require __DIR__.'/shop.php';
+require __DIR__.'/running.php';
+require __DIR__.'/admin.php';
+require __DIR__.'/pos.php';
