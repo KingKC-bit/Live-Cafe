@@ -24,8 +24,7 @@ class EventController extends Controller
 
     public function show(Event $event): View
     {
-        // Placeholder — build the event detail / RSVP view next
         $event->load('rsvps.user');
-        abort(404, 'Event detail page not yet built.');
+        return view('running.show', compact('event'));
     }
 }

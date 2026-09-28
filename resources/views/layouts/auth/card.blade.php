@@ -13,12 +13,12 @@
 
                     <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
                 </a>
+<div class="flex flex-col items-center justify-center gap-6">
+    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
+        <img src="{{ asset('images/livecafelogo.jpeg') }}" alt="Live Cafe Logo" class="h-12 w-auto object-contain">
+    </a>
+</div>
 
-                <div class="flex flex-col gap-6">
-                    <div class="rounded-xl border bg-white dark:bg-stone-950 dark:border-stone-800 text-stone-800 shadow-xs">
-                        <div class="px-10 py-8">{{ $slot }}</div>
-                    </div>
-                </div>
             </div>
         </div>
 

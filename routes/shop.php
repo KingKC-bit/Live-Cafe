@@ -19,8 +19,8 @@ Route::prefix('shop')->name('shop.')->group(function () {
 
     // Public — product browsing (no login required)
     Route::get('/', [ProductController::class, 'index'])->name('index');
-    Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('product.show');
-
+    Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
+    
     // Authenticated customers only
     Route::middleware(['auth', 'verified'])->group(function () {
 

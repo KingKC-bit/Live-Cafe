@@ -16,9 +16,17 @@ class FortifyServiceProvider extends ServiceProvider
      * Register any application services.
      */
     public function register(): void
-    {
-        //
-    }
+{
+    $this->app->singleton(
+        \Laravel\Fortify\Contracts\LoginResponse::class,
+        \App\Actions\Fortify\LoginResponse::class
+    );
+
+    $this->app->singleton(
+        \Laravel\Fortify\Contracts\CreatesNewUsers::class,
+        \App\Actions\Fortify\CreateNewUser::class
+    );
+}
 
     /**
      * Bootstrap any application services.
@@ -44,6 +52,7 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureViews(): void
     {
         Fortify::loginView(fn () => view('pages::auth.login'));
+        Fortify::registerView(fn () => view('pages::auth.register'));
         Fortify::verifyEmailView(fn () => view('pages::auth.verify-email'));
         Fortify::resetPasswordView(fn () => view('pages::auth.reset-password'));
         Fortify::requestPasswordResetLinkView(fn () => view('pages::auth.forgot-password'));
