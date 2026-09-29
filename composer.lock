@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3c9fcb151ba96aee57f0a324bcc6f9c",
+    "content-hash": "0b1f0f175e40766d695b0337af5b4424",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -7771,56 +7771,6 @@
                 "source": "https://github.com/webmozarts/assert/tree/2.4.1"
             },
             "time": "2026-06-15T15:31:57+00:00"
-        },
-        {
-            "name": "zfhassaan/payfast",
-            "version": "v1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zfhassaan/payfast.git",
-                "reference": "3fb19f3fc3b01532996bb925a403b56cbe2b86ab"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zfhassaan/payfast/zipball/3fb19f3fc3b01532996bb925a403b56cbe2b86ab",
-                "reference": "3fb19f3fc3b01532996bb925a403b56cbe2b86ab",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^8.0.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "payfast": "zfhassaan\\Payfast\\Facade\\PayfastFacade"
-                    },
-                    "providers": [
-                        "zfhassaan\\Payfast\\Provider\\PayFastServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "zfhassaan\\Payfast\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Hassaan Ali",
-                    "email": "zfhassaan@gmail.com"
-                }
-            ],
-            "description": "Laravel 9 Package for Payfast Payment Gateway",
-            "support": {
-                "issues": "https://github.com/zfhassaan/payfast/issues",
-                "source": "https://github.com/zfhassaan/payfast/tree/v1.0.3"
-            },
-            "time": "2023-06-19T13:35:39+00:00"
         }
     ],
     "packages-dev": [

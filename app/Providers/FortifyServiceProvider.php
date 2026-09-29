@@ -12,21 +12,36 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
+
     /**
      * Register any application services.
      */
     public function register(): void
-{
-    $this->app->singleton(
-        \Laravel\Fortify\Contracts\LoginResponse::class,
-        \App\Actions\Fortify\LoginResponse::class
-    );
+    {
+        // Your existing LoginResponse binding
+        $this->app->singleton(
+            \Laravel\Fortify\Contracts\LoginResponse::class,
+            \App\Actions\Fortify\LoginResponse::class
+        );
 
-    $this->app->singleton(
-        \Laravel\Fortify\Contracts\CreatesNewUsers::class,
-        \App\Actions\Fortify\CreateNewUser::class
-    );
-}
+        // Your existing RegisterResponse binding
+        $this->app->singleton(
+            \Laravel\Fortify\Contracts\RegisterResponse::class,
+            \App\Actions\Fortify\RegisterResponse::class
+        );
+
+        // ADD THIS: Overrides the redirect engine AFTER clicking the Mailpit link
+        $this->app->singleton(
+            \Laravel\Fortify\Contracts\VerifyEmailResponse::class,
+            \App\Actions\Fortify\VerifyEmailResponse::class
+        );
+
+        $this->app->singleton(
+            \Laravel\Fortify\Contracts\CreatesNewUsers::class,
+            \App\Actions\Fortify\CreateNewUser::class
+        );
+    }
+
 
     /**
      * Bootstrap any application services.

@@ -6,27 +6,31 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Live Cafe')</title>
 
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-
+    <link rel = "icon" href = "{{ asset('images/livecafelogo.jpeg') }}" type = "image/jpeg" href = {{ asset('images/livecafelogo.jpeg') }}>
     <style>
+        /* ── Tokens ── */
         :root {
-            --green:        #B598A3;
-            --accent:       #86A96F;
-            --base:         #F0EEE9;
-            --green-light:  #9D7E8B;
-            --sage:         #DCD3D7;
-            --slate:        #4A5568;
-            --ink:          #1A1A1A;
-            --white:        #FFFFFF;
-            --danger:       #C0392B;
-            --success:      #27AE60;
+            --green:       #B598A3; /* Pantone TCX Mauve Shadows */
+            --accent:      #86A96F; /* Pantone TCX Matcha Green */
+            --base:        #F0EEE9; /* Pantone TCX White Cloud */
+            --green-light: #9D7E8B; 
+            --sage:        #DCD3D7; 
+            --slate:       #4A5568;
+            --ink:         #1A1A1A;
+            --white:       #FFFFFF;
+            --danger:      #C0392B;
+            --success:     #27AE60;
+
             --font-body:    'DM Sans', sans-serif;
             --font-display: 'Playfair Display', serif;
-            --nav-h:        64px;
+            --nav-h: 64px;
         }
 
+        /* ── Reset ── */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 16px; scroll-behavior: smooth; }
 
@@ -61,20 +65,18 @@
             justify-content: space-between;
         }
 
+        /* Fixed Image Scaling for Logo */
         .nav-logo {
             display: flex;
             align-items: center;
             text-decoration: none;
         }
 
-        /* Custom image layout fixes */
         .nav-logo img {
             height: calc(var(--nav-h) - 20px);
             width: auto;
-            object-contain: fit;
+            object-fit: contain;
         }
-
-        .nav-logo span { color: #FFFFFF; }
 
         .nav-links {
             display: flex;
@@ -93,11 +95,7 @@
 
         .nav-links a:hover,
         .nav-links a.active { color: var(--white); }
-
-        .nav-links a.active {
-            border-bottom: 2px solid var(--white);
-            padding-bottom: 2px;
-        }
+        .nav-links a.active { border-bottom: 2px solid var(--white); padding-bottom: 2px; }
 
         .nav-btn {
             background: var(--accent);
@@ -109,7 +107,6 @@
             text-decoration: none;
             transition: opacity 0.15s;
         }
-
         .nav-btn:hover { opacity: 0.88; }
 
         .nav-signout {
@@ -123,10 +120,9 @@
             padding: 0;
             transition: color 0.15s;
         }
-
         .nav-signout:hover { color: var(--white); }
 
-        /* ── Flash ── */
+        /* ── Flash messages ── */
         .flash-wrap {
             width: 100%;
             max-width: 1200px;
@@ -140,13 +136,15 @@
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
         }
-
         .flash-success { border-color: var(--success); background: #edfaf3; color: #1a5c38; }
         .flash-error   { border-color: var(--danger);  background: #fdf0ef; color: #7b1c14; }
         .flash-info    { border-color: var(--accent);  background: #f7faf4; color: #3a5c28; }
 
-        /* ── Main ── */
-        .main { flex: 1; }
+        /* ── Main content ── */
+        .main { 
+            flex: 1; 
+            padding: 3rem 0;
+        }
 
         /* ── Footer ── */
         .footer {
@@ -168,18 +166,11 @@
             gap: 1rem;
         }
 
-        .footer-logo {
-            display: flex;
-            align-items: center;
-        }
-
         .footer-logo img {
             height: 36px;
             width: auto;
-            object-contain: fit;
+            object-fit: contain;
         }
-
-        .footer-logo span { color: #FFFFFF; }
 
         .footer-links {
             display: flex;
@@ -192,9 +183,9 @@
             text-decoration: none;
             transition: color 0.15s;
         }
-
         .footer-links a:hover { color: var(--white); }
 
+        /* ── Utility ── */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -207,88 +198,99 @@
             .footer-links { justify-content: center; }
         }
     </style>
-
     @stack('styles')
 </head>
 <body>
 
+    <!-- Navigation Bar -->
     <nav class="nav">
         <div class="nav-inner">
-            {{-- Updated Brand Logo Link --}}
             <a href="{{ route('home') }}" class="nav-logo">
                 <img src="{{ asset('images/livecafelogo.jpeg') }}" alt="Live Cafe Logo">
             </a>
 
             <ul class="nav-links">
-
                 @auth
-                    {{-- ── Customer nav ── --}}
+                    {{-- ── Logged In Session Nav ── --}}
+                    <li>
+                        <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">Shop</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('running.index') }}" class="{{ request()->is('running*') ? 'active' : '' }}">Running Club</a>
+                    </li>
+                    
                     @if(auth()->user()->isCustomer())
                         <li>
-                            <a href="{{ route('shop.index') }}"
-                               class="{{ request()->is('shop*') ? 'active' : '' }}">Shop</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('running.index') }}"
-                               class="{{ request()->is('running*') ? 'active' : '' }}">Running Club</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('shop.orders.index') }}"
-                               class="{{ request()->is('shop/orders*') ? 'active' : '' }}">My orders</a>
+                            <a href="{{ route('shop.orders.index') }}" class="{{ request()->is('shop/orders*') ? 'active' : '' }}">My Orders</a>
                         </li>
                     @endif
 
-                    {{-- ── Staff nav — POS only, no admin ── --}}
                     @if(auth()->user()->isStaff())
                         <li>
-                            <span style="color:rgba(255,255,255,0.5);font-size:0.8rem;">
-                                Staff &mdash; {{ auth()->user()->name }}
-                            </span>
-                        </li>
-                        <li>
-                            <a href="{{ route('pos.index') }}"
-                               class="{{ request()->is('pos*') ? 'active' : '' }}">POS</a>
+                            <a href="{{ route('pos.index') }}" class="{{ request()->is('pos*') ? 'active' : '' }}">POS</a>
                         </li>
                     @endif
 
-                    {{-- ── Admin nav — Dashboard + POS ── --}}
-                    @if(auth()->user()->isAdmin())
-                        <li>
-                            <span style="color:rgba(255,255,255,0.5);font-size:0.8rem;">
-                                Admin &mdash; {{ auth()->user()->name }}
-                            </span>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.dashboard') }}"
-                               class="{{ request()->is('admin*') ? 'active' : '' }}">Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('pos.index') }}"
-                               class="{{ request()->is('pos*') ? 'active' : '' }}">POS</a>
-                        </li>
-                    @endif
+                    {{-- Formatted Sign Out Engine --}}
+                    <li>
+                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="nav-signout">Sign Out</button>
+                        </form>
+                    </li>
+                @else
+                    {{-- ── Guest Session Nav (Visible in new browsers) ── --}}
+                    <li>
+                        <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">Shop</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('running.index') }}" class="{{ request()->is('running*') ? 'active' : '' }}">Running Club</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('login') }}" class="{{ request()->is('login') ? 'active' : '' }}">Sign in</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('register') }}" class="nav-btn">Join</a>
+                    </li>
                 @endauth
-
             </ul>
         </div>
     </nav>
 
-    {{-- Main content region --}}
+    <!-- Flash message engine -->
+    @if(session('success') || session('error') || session('info'))
+        <div class="flash-wrap">
+            @if(session('success'))
+                <div class="flash flash-success">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="flash flash-error">{{ session('error') }}</div>
+            @endif
+            @if(session('info'))
+                <div class="flash flash-info">{{ session('info') }}</div>
+            @endif
+        </div>
+    @endif
+
+    <!-- Main dynamic page content slot -->
     <main class="main">
         @yield('content')
     </main>
 
-    {{-- Updated Footer Region Logo --}}
+    <!-- Footer -->
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-logo">
-                <img src="{{ asset('images/livecafelogo.jpeg') }}" alt="Live Cafe Footer Logo">
+                <img src="{{ asset('images/livecafelogo.jpeg') }}" alt="Live Cafe Logo">
             </div>
-            <div class="footer-text">
-                &copy; {{ date('Y') }} Live Cafe. All rights reserved.
-            </div>
+
+            <ul class="footer-links">
+                <li><a href="{{ route('shop.index') }}">Shop</a></li>
+                <li><a href="{{ route('running.index') }}">Running Club</a></li>
+            </ul>
         </div>
     </footer>
 
+    @stack('scripts')
 </body>
 </html>
