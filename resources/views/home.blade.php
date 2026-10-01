@@ -391,7 +391,7 @@
             <div class="feature-card">
                 <div class="feature-card-icon">🏃</div>
                 <h3>Saturday running club</h3>
-                <p>Weekly runs from the cafe every Saturday. RSVP to secure your spot, bring friends, and see who else is joining.</p>
+                <p>Weekly runs from the cafe every Saturday. RSVP so the organisers know you're coming, and bring friends along.</p>
                 <a href="{{ route('running.index') }}">See upcoming runs</a>
             </div>
 
@@ -449,7 +449,7 @@
                         &middot;
                         {{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }}
                     </span>
-                    <span class="event-name">{{ $event->description ?? 'Saturday Run' }}</span>
+                    <span class="event-name">{{ $event->title }}</span>
                     <span class="event-location">{{ $event->address }}</span>
                     <a href="{{ route('running.events.show', $event) }}" class="event-rsvp">RSVP</a>
                 </div>
