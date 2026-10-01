@@ -11,6 +11,7 @@ class AnnouncementController extends Controller
     public function index(): View
     {
         $announcements = Announcement::latest()->get();
+
         return view('running.announcements', compact('announcements'));
     }
 

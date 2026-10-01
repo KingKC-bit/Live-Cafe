@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
@@ -24,16 +24,16 @@ class ProductController extends Controller
             ->where('quantity', '>', 0)
             ->with('category')
             ->get()
-            ->filter(fn ($p) => $p->category !== null && !Str::contains(strtolower($p->category->name), ['add-on', 'addon']))
+            ->filter(fn ($p) => $p->category !== null && ! Str::contains(strtolower($p->category->name), ['add-on', 'addon']))
             ->groupBy(fn ($p) => $p->category->name);
 
         return view('shop.index', compact('categories', 'productsByCategory'));
     }
 
-
     public function show(Product $product): View
     {
         $product->load('category');
+
         return view('shop.show', compact('product'));
     }
 }

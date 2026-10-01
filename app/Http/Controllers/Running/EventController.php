@@ -25,6 +25,7 @@ class EventController extends Controller
     public function show(Event $event): View
     {
         $event->load('rsvps.user');
+
         return view('running.show', compact('event'));
     }
 }
