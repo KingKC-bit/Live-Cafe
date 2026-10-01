@@ -10,12 +10,16 @@ class AnnouncementController extends Controller
 {
     public function index(): View
     {
-        $announcements = Announcement::latest()->get();
+        $announcements = Announcement::query()->published()->forDisplay()->get();
+
         return view('running.announcements', compact('announcements'));
     }
 
     public function show(Announcement $announcement): View
     {
-        return view('running.announcements', compact('announcement'));
+        // Drafts stay private until an admin publishes them.
+        abort_unless($announcement->isPublished(), 404);
+
+        return view('running.announcement', compact('announcement'));
     }
 }

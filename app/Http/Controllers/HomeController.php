@@ -18,10 +18,10 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
-        // Upcoming events only — ordered by soonest first
-        $upcomingEvents = Event::where('event_date', '>=', now()->toDateString())
-            ->orderBy('event_date')
-            ->orderBy('event_time')
+        // Upcoming events only — ordered by soonest first (cancelled runs are left out)
+        $upcomingEvents = Event::upcoming()
+            ->scheduled()
+            ->chronological()
             ->take(4)
             ->get();
 

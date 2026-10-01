@@ -1,16 +1,82 @@
 @extends('layouts.app')
-@section('title', 'Event — Live Cafe Running Club')
+
+@php
+    $optionalFacts = collect([
+        'Distance' => $event->distanceLabel(),
+        'Pace' => $event->pace,
+        'Dress code' => $event->dress_code,
+    ])->filter();
+@endphp
+
+@section('title', $event->title.' — Live Running Club')
+
+@push('styles')
+    @include('running.partials.styles')
+@endpush
+
 @section('content')
-<div style="max-width:1200px;margin:3rem auto;padding:0 2rem;">
-    <a href="{{ route('running.index') }}" style="font-size:0.875rem;color:var(--slate);text-decoration:none;">← Back to events</a>
-    <h1 style="font-family:var(--font-display);font-size:2rem;color:var(--green);margin:1.5rem 0 0.5rem;">
-        {{ $event->description ?? 'Saturday Run' }}
-    </h1>
-    <p style="color:var(--slate);margin-bottom:0.5rem;">
-        {{ \Carbon\Carbon::parse($event->event_date)->format('l, d F Y') }}
-        at {{ \Carbon\Carbon::parse($event->event_time)->format('H:i') }}
-    </p>
-    <p style="color:var(--slate);margin-bottom:2rem;">{{ $event->address }}</p>
-    <p style="color:var(--slate);font-size:0.875rem;">RSVP functionality coming soon.</p>
+
+<div class="rc-wrap rc-detail">
+    <a href="{{ route('running.index') }}" class="rc-back">&larr; All runs</a>
+
+    <div class="rc-detail-grid">
+        <div class="rc-detail-main">
+            <div class="rc-badges">
+                <span class="rc-badge rc-badge-type">{{ $event->typeLabel() }}</span>
+                @if ($event->sponsor)
+                    <span class="rc-badge rc-badge-sponsor">Presented by {{ $event->sponsor }}</span>
+                @endif
+                @if ($event->isCancelled())
+                    <span class="rc-badge rc-badge-cancelled">Cancelled</span>
+                @endif
+            </div>
+
+            <h1 class="rc-detail-title">{{ $event->title }}</h1>
+            <p class="rc-detail-when">{{ $event->event_date->format('l j F Y') }} · {{ $event->startTimeLabel() }}</p>
+
+            <img class="rc-detail-photo"
+                 src="{{ $event->photoUrl() }}"
+                 alt="{{ $event->photo?->alt_text ?: 'Live Running Club members on a club run' }}">
+
+            <dl class="rc-facts">
+                <div>
+                    <dt>Date</dt>
+                    <dd>{{ $event->event_date->format('l j F Y') }}</dd>
+                </div>
+                <div>
+                    <dt>Start time</dt>
+                    <dd>{{ $event->startTimeLabel() }}</dd>
+                </div>
+                <div class="rc-fact-wide">
+                    <dt>Location</dt>
+                    <dd>
+                        {{ $event->address }}<br>
+                        <a href="{{ $event->mapUrl() }}" class="rc-map-link" target="_blank" rel="noopener">Open in Google Maps</a>
+                    </dd>
+                </div>
+                @foreach ($optionalFacts as $label => $value)
+                    {{-- With an odd number of facts the last one fills the row, so no empty cell shows. --}}
+                    <div @class(['rc-fact-wide' => $loop->last && $loop->count % 2 === 1])>
+                        <dt>{{ $label }}</dt>
+                        <dd>{{ $value }}</dd>
+                    </div>
+                @endforeach
+            </dl>
+
+            @if ($event->description !== '')
+                <h2 class="rc-subtitle">About this {{ $event->isRun() ? 'run' : 'event' }}</h2>
+                <p class="rc-prose">{!! nl2br(e($event->description)) !!}</p>
+            @endif
+        </div>
+
+        <aside class="rc-detail-side">
+            @include('running.partials.rsvp-card', ['event' => $event, 'myRsvp' => $myRsvp])
+        </aside>
+    </div>
 </div>
+
 @endsection
+
+@push('scripts')
+    @include('running.partials.stepper-script')
+@endpush
