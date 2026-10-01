@@ -25,6 +25,7 @@ class ProductController extends Controller
             ->get()
             ->filter(fn (Product $p) => $p->category !== null)
             ->groupBy(fn (Product $p) => $p->category->name);
+
         return view('shop.index', compact('categories', 'productsByCategory'));
     }
 
