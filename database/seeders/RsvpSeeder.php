@@ -18,67 +18,26 @@ class RsvpSeeder extends Seeder
         $kamo = User::where('email', 'kamo@livecafe.test')->firstOrFail();
         $zanele = User::where('email', 'zanele@livecafe.test')->firstOrFail();
 
-        $events = Event::orderBy('event_date')
-            ->orderBy('event_time')
-            ->get();
+        $upcoming = Event::query()->upcoming()->chronological()->firstOrFail();
+        $past = Event::query()->past()->orderByDesc('event_date')->firstOrFail();
 
-        $eventOne = $events->get(0);
-        $eventTwo = $events->get(1);
-        $eventThree = $events->get(2);
+        // The upcoming Saturday run.
+        Rsvp::create(['user_id' => $sarah->id, 'event_id' => $upcoming->id, 'extras' => 1]);
+        Rsvp::create(['user_id' => $thando->id, 'event_id' => $upcoming->id, 'extras' => 2]);
+        Rsvp::create(['user_id' => $lwazi->id, 'event_id' => $upcoming->id, 'extras' => 0]);
 
-        Rsvp::create([
-            'user_id' => $sarah->id,
-            'event_id' => $eventOne->id,
-            'extras' => 1,
-        ]);
+        // Last week's run, including one cancelled RSVP that stays on record.
+        Rsvp::create(['user_id' => $aphiwe->id, 'event_id' => $past->id, 'extras' => 1]);
+        Rsvp::create(['user_id' => $kamo->id, 'event_id' => $past->id, 'extras' => 0]);
+        Rsvp::create(['user_id' => $zanele->id, 'event_id' => $past->id, 'extras' => 2]);
 
-        Rsvp::create([
-            'user_id' => $thando->id,
-            'event_id' => $eventOne->id,
-            'extras' => 2,
-        ]);
+        $cancelled = Rsvp::create(['user_id' => $sarah->id, 'event_id' => $past->id, 'extras' => 0]);
+        $cancelled->forceFill([
+            'status' => Rsvp::STATUS_CANCELLED,
+            'cancelled_at' => now()->subDays(8),
+        ])->save();
 
-        Rsvp::create([
-            'user_id' => $lwazi->id,
-            'event_id' => $eventOne->id,
-            'extras' => 0,
-        ]);
-
-        Rsvp::create([
-            'user_id' => $aphiwe->id,
-            'event_id' => $eventTwo->id,
-            'extras' => 1,
-        ]);
-
-        Rsvp::create([
-            'user_id' => $kamo->id,
-            'event_id' => $eventTwo->id,
-            'extras' => 0,
-        ]);
-
-        Rsvp::create([
-            'user_id' => $zanele->id,
-            'event_id' => $eventThree->id,
-            'extras' => 2,
-        ]);
-
-        Rsvp::create([
-            'user_id' => $sarah->id,
-            'event_id' => $eventThree->id,
-            'extras' => 0,
-        ]);
-
-        // Maintain the calculated attendee value.
-        foreach ($events as $event) {
-            $totalAttendees = $event->rsvps()
-                ->get()
-                ->sum(function (Rsvp $rsvp): int {
-                    return 1 + $rsvp->extras;
-                });
-
-            $event->update([
-                'total_attendees' => $totalAttendees,
-            ]);
-        }
+        $upcoming->refreshAttendance();
+        $past->refreshAttendance();
     }
 }
