@@ -58,6 +58,25 @@ jobs:
           sed -i 's/^DB_DATABASE=.*/DB_DATABASE=live_cafe_test/' .env
           sed -i 's/^DB_USERNAME=.*/DB_USERNAME=sail/' .env
           sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=password/' .env
+          sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=array/' .env
+          sed -i 's/^CACHE_STORE=.*/CACHE_STORE=array/' .env
+          sed -i 's/^QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env
+
+      - name: Clear config cache
+        run: php artisan config:clear
+
+      - name: Verify database connection details
+        run: |
+          echo "--- Checking .env DB values ---"
+          grep "^DB_" .env
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            mysqladmin ping -h 127.0.0.1 -uroot -proot --silent && break
+            echo "Waiting for MySQL... attempt $i"
+            sleep 2
+          done
 
       - name: Run database migrations
         run: php artisan migrate --force
