@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Announcements — Run club admin')
+@section('title', 'Announcements — Live Cafe admin')
 
 @push('styles')
     @include('running.partials.styles')
@@ -13,12 +13,15 @@
     @include('running.manage.partials.header', [
         'title' => 'Announcements',
         'active' => 'announcements',
-        'actionUrl' => route('running.manage.announcements.create'),
-        'actionLabel' => 'Write an announcement',
+        'actions' => [
+            [route('running.manage.announcements.create'), 'Write an announcement'],
+            [route('running.manage.events.create'), 'Add a run or event'],
+        ],
     ])
 
     <p class="rc-muted rc-manage-intro">
-        The newest published announcement shows at the top of the run club page. A pinned one stays there until you unpin it.
+        Announcements can be about anything at Live Cafe, like a new flavour or a run. The newest published one shows on the
+        run club page, and the home page links to all of them. A pinned one stays first until you unpin it.
     </p>
 
     @if ($announcements->isEmpty())
@@ -40,6 +43,9 @@
                             <td>
                                 <strong>{{ $announcement->title }}</strong>
                                 <span class="rc-sub">{{ \Illuminate\Support\Str::limit($announcement->description, 110) }}</span>
+                                @if ($announcement->event)
+                                    <span class="rc-sub">Links to the {{ $announcement->event->noun() }} {{ $announcement->event->title }}, {{ $announcement->event->event_date->format('D j M') }}</span>
+                                @endif
                             </td>
                             <td>
                                 <div class="rc-row-badges">

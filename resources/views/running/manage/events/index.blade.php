@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Runs & events — Run club admin')
+@section('title', 'Runs & events — Live Cafe admin')
 
 @push('styles')
     @include('running.partials.styles')
@@ -13,8 +13,10 @@
     @include('running.manage.partials.header', [
         'title' => 'Runs & events',
         'active' => 'events',
-        'actionUrl' => route('running.manage.events.create'),
-        'actionLabel' => 'Add a run or event',
+        'actions' => [
+            [route('running.manage.events.create'), 'Add a run or event'],
+            [route('running.manage.announcements.create'), 'Write an announcement'],
+        ],
     ])
 
     <section class="rc-manage-section" aria-labelledby="upcoming-heading">

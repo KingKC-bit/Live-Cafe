@@ -4,7 +4,7 @@
     $extras = $going->sum('extras');
 @endphp
 
-@section('title', 'RSVPs for '.$event->title.' — Run club admin')
+@section('title', 'RSVPs for '.$event->title.' — Live Cafe admin')
 
 @push('styles')
     @include('running.partials.styles')
@@ -17,8 +17,7 @@
     @include('running.manage.partials.header', [
         'title' => 'RSVPs for '.$event->title,
         'active' => 'events',
-        'actionUrl' => route('running.manage.events.rsvps.export', $event),
-        'actionLabel' => 'Download CSV',
+        'actions' => [[route('running.manage.events.rsvps.export', $event), 'Download CSV']],
     ])
 
     <p class="rc-muted rc-manage-intro">
@@ -38,7 +37,7 @@
             <div class="rc-stat-value">{{ $going->count() }}</div>
         </div>
         <div class="rc-stat">
-            <div class="rc-stat-label">Extra runners</div>
+            <div class="rc-stat-label">{{ ucfirst($event->extrasNoun()) }}</div>
             <div class="rc-stat-value">{{ $extras }}</div>
         </div>
         <div class="rc-stat">
@@ -67,7 +66,7 @@
                             <th scope="col">Member</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone</th>
-                            <th scope="col">Extra runners</th>
+                            <th scope="col">{{ ucfirst($event->extrasNoun()) }}</th>
                             <th scope="col">RSVP'd</th>
                         </tr>
                     </thead>

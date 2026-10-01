@@ -134,7 +134,7 @@ test('after RSVPs close, extra runners cannot be added', function () {
     $this->travelTo(CarbonImmutable::parse('2026-10-03 01:00'));
 
     $this->post(route('running.rsvp.store', $this->event), ['extras' => 2])
-        ->assertSessionHas('error', 'RSVPs closed at 23:00 on Fri 2 Oct. You can still lower your extra runners or cancel your RSVP.');
+        ->assertSessionHas('error', 'RSVPs closed at 23:00 on Fri 2 Oct. You can still bring fewer people or cancel your RSVP.');
 
     expect(Rsvp::query()->sole()->extras)->toBe(1);
 });
@@ -243,4 +243,26 @@ test('the confirmation email has the run details', function () {
         ->and($mail->introLines)->toContain('**Dress code:** Black and pink')
         ->and($mail->introLines)->toContain("You said you're bringing 2 extra runners.")
         ->and($mail->actionUrl)->toBe(route('running.events.show', $this->event));
+});
+
+test('an event asks about guests instead of extra runners', function () {
+    $event = Event::factory()->event()->startingAt(CarbonImmutable::parse('2026-10-03 10:00'))->create();
+
+    $this->actingAs($this->member)
+        ->get(route('running.events.show', $event))
+        ->assertSee('Add guests. No names needed.')
+        ->assertSee('aria-label="One more guest"', false)
+        ->assertDontSee('runner');
+
+    Rsvp::factory()->for($event)->for($this->member)->create(['extras' => 2]);
+
+    $this->actingAs($this->member)
+        ->get(route('running.events.show', $event))
+        ->assertSee("You're going with 2 guests.", false)
+        ->assertSee('<label class="rc-label" for="extras">Guests</label>', false);
+
+    $mail = (new RsvpConfirmed($event, 1))->toMail($this->member);
+
+    expect($mail->introLines)->toContain("You said you're bringing 1 guest.")
+        ->and($mail->outroLines)->toContain("Plans changed? You can cancel or change how many people you're bringing on the event page.");
 });

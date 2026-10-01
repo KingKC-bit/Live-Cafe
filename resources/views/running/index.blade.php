@@ -12,10 +12,10 @@
     <div class="rc-wrap rc-hero-inner">
         <div class="rc-hero-card">
             <p class="rc-eyebrow">Live Running Club</p>
-            <h1 class="rc-hero-title">Upcoming runs</h1>
+            <h1 class="rc-hero-title">Runs and events</h1>
             <p class="rc-hero-lead">
-                All paces welcome. RSVPs close eight hours before each start, so the
-                organisers know roughly how many runners to expect.
+                All paces welcome on our runs. RSVPs close eight hours before each start,
+                so the organisers know roughly how many people to expect.
             </p>
         </div>
         <img class="rc-hero-photo"
@@ -27,6 +27,8 @@
 
 <div class="rc-wrap rc-body">
 
+    @include('running.partials.admin-bar')
+
     @if ($announcement)
         <section class="rc-card rc-announcement" aria-labelledby="announcement-title">
             <div class="rc-announcement-head">
@@ -37,6 +39,11 @@
             </div>
             <h2 id="announcement-title" class="rc-announcement-title">{{ $announcement->title }}</h2>
             <p class="rc-announcement-body">{{ $announcement->description }}</p>
+            @if ($announcement->event)
+                <p class="rc-announcement-link">
+                    <a href="{{ route('running.events.show', $announcement->event) }}" class="rc-btn rc-btn-outline rc-btn-small">See the {{ $announcement->event->noun() }}</a>
+                </p>
+            @endif
             <p class="rc-muted">
                 Posted {{ $announcement->published_at?->diffForHumans() }} ·
                 <a href="{{ route('running.announcements.index') }}">All announcements ({{ $announcementCount }})</a>
@@ -54,7 +61,7 @@
     @forelse ($events as $event)
         @include('running.partials.event-row', ['event' => $event, 'myRsvp' => $myRsvps->get($event->id)])
     @empty
-        <p class="rc-empty">No runs on the calendar right now. Check back soon.</p>
+        <p class="rc-empty">Nothing on the calendar right now. Check back soon.</p>
     @endforelse
 
     @guest
@@ -62,12 +69,6 @@
             <a href="{{ route('running.sign-in') }}">Sign in</a> or <a href="{{ route('running.join') }}">create an account</a> to RSVP.
         </p>
     @endguest
-
-    @if (auth()->user()?->isAdmin())
-        <p class="rc-footnote">
-            <a href="{{ route('running.manage.index') }}">Manage runs, events and announcements</a>
-        </p>
-    @endif
 </div>
 
 @endsection

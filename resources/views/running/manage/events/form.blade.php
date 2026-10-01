@@ -6,9 +6,10 @@
     $type = old('type', $event->type);
     $startTime = old('event_time', $event->event_time ? substr($event->event_time, 0, 5) : null);
     $hasPhoto = $editing && $event->photo !== null;
+    $isRun = $type === \App\Models\Event::TYPE_RUN;
 @endphp
 
-@section('title', $pageTitle.' — Run club admin')
+@section('title', $pageTitle.' — Live Cafe admin')
 
 @push('styles')
     @include('running.partials.styles')
@@ -28,7 +29,7 @@
     @endif
 
     @if ($editing && $event->isCancelled())
-        <p class="rc-error-summary">This {{ $event->isRun() ? 'run' : 'event' }} was cancelled, so changes won't be emailed to anyone.</p>
+        <p class="rc-error-summary">This {{ $event->noun() }} was cancelled, so changes won't be emailed to anyone.</p>
     @elseif ($editing && $event->active_rsvps_count > 0)
         <p class="rc-closing-note">
             {{ $event->active_rsvps_count }} {{ \Illuminate\Support\Str::plural('member', $event->active_rsvps_count) }}
@@ -64,14 +65,16 @@
                         Event
                     </label>
                 </fieldset>
-                <span class="rc-hint">Use Event for socials, brand activations and anything that isn't a club run.</span>
+                <span class="rc-hint">Pick Run for any run, including brand-sponsored ones. Pick Event for anything else, like a tasting, a launch or a social.</span>
                 @error('type') <p class="rc-error">{{ $message }}</p> @enderror
             </div>
 
             <div class="rc-field rc-field-wide">
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title" value="{{ old('title', $event->title) }}" maxlength="120" required
-                       placeholder="Saturday Run" @error('title') aria-invalid="true" @enderror>
+                       placeholder="{{ $isRun ? 'Saturday Run' : 'Coffee tasting' }}"
+                       data-placeholder-run="Saturday Run" data-placeholder-event="Coffee tasting"
+                       @error('title') aria-invalid="true" @enderror>
                 @error('title') <p class="rc-error">{{ $message }}</p> @enderror
             </div>
 
@@ -99,15 +102,16 @@
                 @error('address') <p class="rc-error">{{ $message }}</p> @enderror
             </div>
 
-            <div class="rc-field">
-                <label for="distance_km">Distance in km <span class="rc-optional" data-distance-optional @if ($type === \App\Models\Event::TYPE_RUN) hidden @endif>(optional)</span></label>
+            {{-- Distance and pace only apply to runs, so they're hidden for an event. --}}
+            <div class="rc-field" data-run-only @unless ($isRun) hidden @endunless>
+                <label for="distance_km">Distance in km</label>
                 <input type="number" id="distance_km" name="distance_km" value="{{ old('distance_km', $event->distance_km) }}"
                        min="0.1" max="200" step="0.1" inputmode="decimal" placeholder="5"
-                       @required($type === \App\Models\Event::TYPE_RUN) @error('distance_km') aria-invalid="true" @enderror>
+                       @required($isRun) @error('distance_km') aria-invalid="true" @enderror>
                 @error('distance_km') <p class="rc-error">{{ $message }}</p> @enderror
             </div>
 
-            <div class="rc-field">
+            <div class="rc-field" data-run-only @unless ($isRun) hidden @endunless>
                 <label for="pace">Pace <span class="rc-optional">(optional)</span></label>
                 <input type="text" id="pace" name="pace" value="{{ old('pace', $event->pace) }}" maxlength="40" placeholder="Easy">
                 @error('pace') <p class="rc-error">{{ $message }}</p> @enderror
@@ -129,7 +133,9 @@
             <div class="rc-field rc-field-wide">
                 <label for="description">Description <span class="rc-optional">(optional)</span></label>
                 <textarea id="description" name="description" maxlength="5000"
-                          placeholder="The route, where to meet, what to bring.">{{ old('description', $event->description) }}</textarea>
+                          placeholder="{{ $isRun ? 'The route, where to meet, what to bring.' : 'What\'s happening, who it\'s for, what to bring.' }}"
+                          data-placeholder-run="The route, where to meet, what to bring."
+                          data-placeholder-event="What's happening, who it's for, what to bring.">{{ old('description', $event->description) }}</textarea>
                 @error('description') <p class="rc-error">{{ $message }}</p> @enderror
             </div>
 
@@ -144,7 +150,7 @@
                 @endif
                 <input type="file" id="photo" name="photo" accept="image/*">
                 <span class="rc-hint">
-                    {{ $hasPhoto ? 'Choose a file to replace it.' : 'Without one, a club photo is used.' }} JPG, PNG or WebP up to 5 MB.
+                    {{ $hasPhoto ? 'Choose a file to replace it.' : 'Without one, a run shows a club photo and an event shows none.' }} JPG, PNG or WebP up to 5 MB.
                 </span>
                 @error('photo') <p class="rc-error">{{ $message }}</p> @enderror
             </div>
@@ -175,17 +181,23 @@
         const date = document.getElementById('event_date');
         const time = document.getElementById('event_time');
         const distance = document.getElementById('distance_km');
-        const distanceOptional = document.querySelector('[data-distance-optional]');
 
-        if (!form || !note || !date || !time || !distance || !distanceOptional) {
+        if (!form || !note || !date || !time || !distance) {
             return;
         }
 
-        // Distance is required for a run and optional for an event.
+        const runOnly = form.querySelectorAll('[data-run-only]');
+        const examples = form.querySelectorAll('[data-placeholder-run]');
+
+        // Distance and pace only apply to runs: an event hides them (and the
+        // server ignores them), and the example text changes to suit.
         const syncType = () => {
             const isRun = form.querySelector('input[name="type"]:checked')?.value === 'run';
+            runOnly.forEach((field) => { field.hidden = !isRun; });
             distance.required = isRun;
-            distanceOptional.hidden = isRun;
+            examples.forEach((input) => {
+                input.placeholder = isRun ? input.dataset.placeholderRun : input.dataset.placeholderEvent;
+            });
         };
 
         const hours = Number(note.dataset.cutoffHours);

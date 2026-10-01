@@ -10,11 +10,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * A run club notice. The body lives in the existing description column.
- * An empty published_at means the announcement is a draft.
+ * News from Live Cafe. It can be about anything, like a new flavour or a
+ * route change, and can point at a run or event so members can open it and
+ * RSVP. The body lives in the existing description column. An empty
+ * published_at means the announcement is a draft.
  *
  * @property int $id
  * @property int|null $user_id
+ * @property int|null $event_id
  * @property string $title
  * @property string $description
  * @property bool $is_pinned
@@ -30,6 +33,7 @@ class Announcement extends Model
         'title',
         'description',
         'is_pinned',
+        'event_id',
     ];
 
     protected $attributes = [
@@ -52,6 +56,16 @@ class Announcement extends Model
     public function author(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * The run or event it's about, if any.
+     *
+     * @return BelongsTo<Event, $this>
+     */
+    public function event(): BelongsTo
+    {
+        return $this->belongsTo(Event::class);
     }
 
     /**

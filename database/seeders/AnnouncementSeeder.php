@@ -21,7 +21,7 @@ class AnnouncementSeeder extends Seeder
             ],
             [
                 'title' => 'RSVP so we can plan',
-                'description' => 'Tap RSVP on a run so we know roughly how many runners to expect. RSVPs close 8 hours before each start.',
+                'description' => 'Tap RSVP on a run so we know roughly how many people to expect. RSVPs close 8 hours before each start.',
                 'is_pinned' => false,
                 'published_at' => now()->subDays(6),
             ],

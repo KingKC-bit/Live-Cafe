@@ -81,3 +81,28 @@ test('without a run to return to, a verified member still lands on the shop', fu
         ->get($verificationUrl)
         ->assertRedirect(route('shop.index'));
 });
+
+test('an admin who opens the management page while signed out lands on it after signing in', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->get(route('running.manage.index'))->assertRedirect(route('login'));
+
+    $this->post(route('login.store'), ['email' => $admin->email, 'password' => 'password'])
+        ->assertRedirect(route('running.manage.index'));
+});
+
+test('an admin signing in from the run club comes back to it', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->get(route('running.sign-in'));
+
+    $this->post(route('login.store'), ['email' => $admin->email, 'password' => 'password'])
+        ->assertRedirect(route('running.index'));
+});
+
+test('an admin signing in from the login page still lands on the admin dashboard', function () {
+    $admin = User::factory()->admin()->create();
+
+    $this->post(route('login.store'), ['email' => $admin->email, 'password' => 'password'])
+        ->assertRedirect(route('admin.dashboard'));
+});

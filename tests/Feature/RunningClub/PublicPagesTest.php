@@ -119,3 +119,48 @@ test('the home page lists upcoming runs by title and leaves out cancelled ones',
         ->assertDontSee('Called Off Run')
         ->assertDontSee('see who else is joining');
 });
+
+test('admins get shortcuts to the management pages on the run club pages, and nobody else does', function () {
+    $event = Event::factory()->startingAt(CarbonImmutable::parse('2026-10-03 07:00'))->create();
+    $admin = User::factory()->admin()->create();
+
+    $this->actingAs($admin)->get(route('running.index'))
+        ->assertSee('Only admins see this')
+        ->assertSee(route('running.manage.events.create'), false)
+        ->assertSee(route('running.manage.announcements.create'), false);
+
+    $this->actingAs($admin)->get(route('running.events.show', $event))
+        ->assertSee('Edit this run')
+        ->assertSee(route('running.manage.events.rsvps', $event), false);
+
+    $this->actingAs(User::factory()->create())->get(route('running.index'))
+        ->assertDontSee('Only admins see this')
+        ->assertDontSee(route('running.manage.index'), false);
+});
+
+test('an announcement about a run links to it, and general news does not', function () {
+    $run = Event::factory()->startingAt(CarbonImmutable::parse('2026-10-03 07:00'))->create(['title' => 'Saturday Run']);
+    $aboutTheRun = Announcement::factory()->pinned()->create(['title' => 'Black and pink this Saturday', 'event_id' => $run->id]);
+    $news = Announcement::factory()->create(['title' => 'New flavour on the menu']);
+
+    $this->get(route('running.index'))
+        ->assertSee('See the run')
+        ->assertSee(route('running.events.show', $run), false);
+
+    $this->get(route('running.announcements.show', $aboutTheRun))
+        ->assertSee('See the run: Saturday Run');
+
+    $this->get(route('running.announcements.show', $news))
+        ->assertOk()
+        ->assertDontSee(route('running.events.show', $run), false);
+});
+
+test('an event without a photo shows none instead of a running photo', function () {
+    $event = Event::factory()->event()->startingAt(CarbonImmutable::parse('2026-10-03 10:00'))->create();
+
+    expect($event->photoUrl())->toBeNull();
+
+    $this->get(route('running.events.show', $event))
+        ->assertOk()
+        ->assertDontSee('<img class="rc-detail-photo"', false);
+});

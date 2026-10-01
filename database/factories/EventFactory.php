@@ -48,13 +48,15 @@ class EventFactory extends Factory
     }
 
     /**
-     * A non-run event, such as a brand-sponsored activation.
+     * An event that isn't a run, like a tasting or a launch.
      */
     public function event(): static
     {
         return $this->state(fn () => [
+            'title' => 'Coffee tasting',
             'type' => Event::TYPE_EVENT,
             'distance_km' => null,
+            'pace' => null,
         ]);
     }
 

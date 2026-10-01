@@ -17,7 +17,9 @@
 @section('content')
 
 <div class="rc-wrap rc-detail">
-    <a href="{{ route('running.index') }}" class="rc-back">&larr; All runs</a>
+    <a href="{{ route('running.index') }}" class="rc-back">&larr; Runs and events</a>
+
+    @include('running.partials.admin-bar', ['event' => $event])
 
     <div class="rc-detail-grid">
         <div class="rc-detail-main">
@@ -34,9 +36,11 @@
             <h1 class="rc-detail-title">{{ $event->title }}</h1>
             <p class="rc-detail-when">{{ $event->event_date->format('l j F Y') }} · {{ $event->startTimeLabel() }}</p>
 
-            <img class="rc-detail-photo"
-                 src="{{ $event->photoUrl() }}"
-                 alt="{{ $event->photo?->alt_text ?: 'Live Running Club members on a club run' }}">
+            @if ($photoUrl = $event->photoUrl())
+                <img class="rc-detail-photo"
+                     src="{{ $photoUrl }}"
+                     alt="{{ $event->photo?->alt_text ?: 'Live Running Club members on a club run' }}">
+            @endif
 
             <dl class="rc-facts">
                 <div>
@@ -64,7 +68,7 @@
             </dl>
 
             @if ($event->description !== '')
-                <h2 class="rc-subtitle">About this {{ $event->isRun() ? 'run' : 'event' }}</h2>
+                <h2 class="rc-subtitle">About this {{ $event->noun() }}</h2>
                 <p class="rc-prose">{!! nl2br(e($event->description)) !!}</p>
             @endif
         </div>

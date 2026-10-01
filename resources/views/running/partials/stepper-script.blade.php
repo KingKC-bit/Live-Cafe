@@ -1,5 +1,5 @@
 {{--
-    The − / + control for extra runners. Without JavaScript the box is a normal
+    The − / + control for extra runners or guests. Without JavaScript the box is a normal
     number field; with it, the box becomes read-only so the number can only move
     one step at a time, which stops typos like 30 instead of 3.
 --}}

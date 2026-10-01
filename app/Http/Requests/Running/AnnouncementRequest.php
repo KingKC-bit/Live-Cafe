@@ -4,6 +4,7 @@ namespace App\Http\Requests\Running;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AnnouncementRequest extends FormRequest
 {
@@ -21,6 +22,8 @@ class AnnouncementRequest extends FormRequest
             'title' => ['required', 'string', 'max:150'],
             'description' => ['required', 'string', 'max:5000'],
             'is_pinned' => ['nullable', 'boolean'],
+            // Optional: the run or event the announcement is about.
+            'event_id' => ['nullable', 'integer', Rule::exists('events', 'id')],
             // Which button was pressed: "Publish" or "Save as draft".
             'action' => ['required', 'in:publish,draft'],
         ];
@@ -33,6 +36,7 @@ class AnnouncementRequest extends FormRequest
     {
         return [
             'description' => 'message',
+            'event_id' => 'run or event',
         ];
     }
 
@@ -42,7 +46,7 @@ class AnnouncementRequest extends FormRequest
     }
 
     /**
-     * @return array{title: string, description: string, is_pinned: bool}
+     * @return array{title: string, description: string, is_pinned: bool, event_id: int|null}
      */
     public function announcementAttributes(): array
     {
@@ -50,6 +54,7 @@ class AnnouncementRequest extends FormRequest
             'title' => (string) $this->validated('title'),
             'description' => (string) $this->validated('description'),
             'is_pinned' => $this->boolean('is_pinned'),
+            'event_id' => $this->filled('event_id') ? $this->integer('event_id') : null,
         ];
     }
 }

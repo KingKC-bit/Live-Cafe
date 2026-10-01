@@ -9,7 +9,7 @@
 @section('content')
 
 <div class="rc-wrap">
-    <a href="{{ route('running.index') }}" class="rc-back">&larr; All runs</a>
+    <a href="{{ route('running.index') }}" class="rc-back">&larr; Runs and events</a>
 
     <header class="rc-page-head">
         <p class="rc-eyebrow">Live Running Club</p>
@@ -20,8 +20,8 @@
         @include('running.partials.event-row', ['event' => $rsvp->event, 'myRsvp' => $rsvp])
     @empty
         <p class="rc-empty">
-            You haven't RSVP'd to any upcoming runs yet.
-            <a href="{{ route('running.index') }}" class="rc-link">See upcoming runs</a>
+            You haven't RSVP'd to anything coming up yet.
+            <a href="{{ route('running.index') }}" class="rc-link">See upcoming runs and events</a>
         </p>
     @endforelse
 </div>

@@ -168,7 +168,7 @@ class EventController extends Controller
                 return;
             }
 
-            fputcsv($out, ['Name', 'Surname', 'Email', 'Phone', 'Extra runners', 'Headcount', 'Status', 'RSVP date'], ',', '"', '');
+            fputcsv($out, ['Name', 'Surname', 'Email', 'Phone', ucfirst($event->extrasNoun()), 'Headcount', 'Status', 'RSVP date'], ',', '"', '');
 
             foreach ($event->rsvps()->with('user')->oldest()->get() as $rsvp) {
                 $row = [

@@ -10,9 +10,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Str;
 
 /**
- * A run or event on the run club calendar.
+ * A run or event on the run club calendar. A run is a club run, sponsored or
+ * not; an event can be anything else, like a tasting or a launch.
  *
  * The start is stored as two columns, event_date and event_time, because
  * other modules already read them. startsAt() joins them into one moment
@@ -54,6 +56,8 @@ class Event extends Model
 
     /**
      * Fallback photos (in public/images/running) for runs without an upload.
+     * Events don't get one, because a running photo would be wrong for, say,
+     * a coffee tasting.
      */
     private const FALLBACK_PHOTOS = [
         'images/running/run-pack.jpg',
@@ -263,6 +267,23 @@ class Event extends Model
         return $this->isRun() ? 'Run' : 'Event';
     }
 
+    /**
+     * "run" or "event", for sentences like "This run has been cancelled".
+     */
+    public function noun(): string
+    {
+        return strtolower($this->typeLabel());
+    }
+
+    /**
+     * What the people a member brings along are called: "extra runners" on a
+     * run, "guests" at an event.
+     */
+    public function extrasNoun(int $count = 2): string
+    {
+        return Str::plural($this->isRun() ? 'extra runner' : 'guest', $count);
+    }
+
     public function startTimeLabel(): string
     {
         return substr($this->event_time, 0, 5);
@@ -280,10 +301,18 @@ class Event extends Model
         return rtrim(rtrim(number_format($this->distance_km, 2, '.', ''), '0'), '.').' km';
     }
 
-    public function photoUrl(): string
+    /**
+     * The uploaded photo, a club photo for a run without one, or null for an
+     * event without one.
+     */
+    public function photoUrl(): ?string
     {
         if ($this->photo !== null) {
             return asset('storage/'.$this->photo->path);
+        }
+
+        if (! $this->isRun()) {
+            return null;
         }
 
         return asset(self::FALLBACK_PHOTOS[$this->id % count(self::FALLBACK_PHOTOS)]);

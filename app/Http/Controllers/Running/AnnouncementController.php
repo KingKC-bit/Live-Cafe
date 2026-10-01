@@ -10,7 +10,7 @@ class AnnouncementController extends Controller
 {
     public function index(): View
     {
-        $announcements = Announcement::query()->published()->forDisplay()->get();
+        $announcements = Announcement::query()->published()->forDisplay()->with('event')->get();
 
         return view('running.announcements', compact('announcements'));
     }
@@ -19,6 +19,8 @@ class AnnouncementController extends Controller
     {
         // Drafts stay private until an admin publishes them.
         abort_unless($announcement->isPublished(), 404);
+
+        $announcement->load('event');
 
         return view('running.announcement', compact('announcement'));
     }

@@ -5,7 +5,7 @@
     $pageTitle = $editing ? 'Edit announcement' : 'Write an announcement';
 @endphp
 
-@section('title', $pageTitle.' — Run club admin')
+@section('title', $pageTitle.' — Live Cafe admin')
 
 @push('styles')
     @include('running.partials.styles')
@@ -35,22 +35,37 @@
             <div class="rc-field rc-field-wide">
                 <label for="title">Title</label>
                 <input type="text" id="title" name="title" value="{{ old('title', $announcement->title) }}" maxlength="150" required
-                       placeholder="New route this Saturday" @error('title') aria-invalid="true" @enderror>
+                       placeholder="New flavour on the menu" @error('title') aria-invalid="true" @enderror>
                 @error('title') <p class="rc-error">{{ $message }}</p> @enderror
             </div>
 
             <div class="rc-field rc-field-wide">
                 <label for="description">Message</label>
                 <textarea id="description" name="description" maxlength="5000" required
+                          placeholder="Anything people should know: a new flavour, new opening hours, a route change."
                           @error('description') aria-invalid="true" @enderror>{{ old('description', $announcement->description) }}</textarea>
                 <span class="rc-hint">Line breaks are kept.</span>
                 @error('description') <p class="rc-error">{{ $message }}</p> @enderror
             </div>
 
             <div class="rc-field rc-field-wide">
+                <label for="event_id">Link to a run or event <span class="rc-optional">(optional)</span></label>
+                <select id="event_id" name="event_id" @error('event_id') aria-invalid="true" @enderror>
+                    <option value="">No link</option>
+                    @foreach ($events as $event)
+                        <option value="{{ $event->id }}" @selected((string) old('event_id', $announcement->event_id) === (string) $event->id)>
+                            {{ $event->event_date->format('D j M') }}: {{ $event->title }} ({{ $event->noun() }}{{ $event->isCancelled() ? ', cancelled' : '' }})
+                        </option>
+                    @endforeach
+                </select>
+                <span class="rc-hint">Adds a button so members can open it and RSVP. Leave it as No link for general news.</span>
+                @error('event_id') <p class="rc-error">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="rc-field rc-field-wide">
                 <label class="rc-choice">
                     <input type="checkbox" name="is_pinned" value="1" @checked(old('is_pinned', $announcement->is_pinned))>
-                    Pin to the top of the run club page
+                    Pin it so it stays first on the run club and announcements pages
                 </label>
                 @error('is_pinned') <p class="rc-error">{{ $message }}</p> @enderror
             </div>

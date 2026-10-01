@@ -154,6 +154,7 @@ test('a run needs a distance but an event does not', function () {
 
     expect($event->isRun())->toBeFalse()
         ->and($event->distance_km)->toBeNull()
+        ->and($event->pace)->toBeNull()
         ->and($event->sponsor)->toBe('Nike');
 
     $this->get(route('running.index'))->assertSee('Presented by Nike');
@@ -364,4 +365,96 @@ test('admins can delete an announcement', function () {
         ->assertRedirect(route('running.manage.announcements.index'));
 
     expect(Announcement::query()->count())->toBe(0);
+});
+
+test('an event has no distance or pace, even if the form sends them', function () {
+    // The Saturday Run starts with a distance and pace, then becomes an event.
+    $this->event->update(['pace' => 'Easy']);
+
+    $this->actingAs($this->admin)
+        ->put(route('running.manage.events.update', $this->event), saturdayRunFormData([
+            'type' => 'event',
+            'title' => 'Coffee tasting',
+            'distance_km' => 'not a number',
+            'pace' => 'Easy',
+        ]))
+        ->assertSessionHasNoErrors();
+
+    $event = $this->event->fresh();
+
+    expect($event?->isRun())->toBeFalse()
+        ->and($event?->distance_km)->toBeNull()
+        ->and($event?->pace)->toBeNull();
+});
+
+test('the RSVP list and export call an event\'s extras guests', function () {
+    $event = Event::factory()->event()->startingAt(CarbonImmutable::parse('2026-10-03 10:00'))->create();
+    Rsvp::factory()->for($event)->create(['extras' => 2]);
+
+    $this->actingAs($this->admin)
+        ->get(route('running.manage.events.rsvps', $event))
+        ->assertSee('<div class="rc-stat-label">Guests</div>', false);
+
+    $csv = $this->get(route('running.manage.events.rsvps.export', $event))->streamedContent();
+
+    expect($csv)->toContain('Name,Surname,Email,Phone,Guests,Headcount,Status,"RSVP date"');
+});
+
+test('the management pages have buttons to add a run or event and write an announcement', function () {
+    $this->actingAs($this->admin)
+        ->get(route('running.manage.index'))
+        ->assertSee('Add a run or event')
+        ->assertSee('Write an announcement')
+        ->assertSee(route('running.manage.announcements.create'), false);
+});
+
+test('an announcement can link to a run, or be general news', function () {
+    $this->actingAs($this->admin);
+
+    $this->get(route('running.manage.announcements.create'))
+        ->assertSee('<option value="'.$this->event->id.'"', false);
+
+    $this->post(route('running.manage.announcements.store'), [
+        'title' => 'Black and pink this Saturday',
+        'description' => 'Wear black and pink.',
+        'event_id' => $this->event->id,
+        'action' => 'publish',
+    ])->assertSessionHasNoErrors();
+
+    $this->post(route('running.manage.announcements.store'), [
+        'title' => 'New flavour on the menu',
+        'description' => 'Try it at the counter.',
+        'event_id' => '',
+        'action' => 'publish',
+    ])->assertSessionHasNoErrors();
+
+    expect(Announcement::query()->where('title', 'Black and pink this Saturday')->sole()->event_id)->toBe($this->event->id)
+        ->and(Announcement::query()->where('title', 'New flavour on the menu')->sole()->event_id)->toBeNull();
+
+    $this->get(route('running.manage.announcements.index'))
+        ->assertSee('Links to the run Saturday Run, Sat 3 Oct');
+});
+
+test('an announcement cannot link to a run that does not exist', function () {
+    $this->actingAs($this->admin)
+        ->post(route('running.manage.announcements.store'), [
+            'title' => 'Ghost run',
+            'description' => 'Body',
+            'event_id' => 999,
+            'action' => 'publish',
+        ])
+        ->assertSessionHasErrors('event_id');
+
+    expect(Announcement::query()->count())->toBe(0);
+});
+
+test('deleting a run keeps announcements about it, without the link', function () {
+    $run = Event::factory()->startingAt(CarbonImmutable::parse('2026-10-10 07:00'))->create();
+    $announcement = Announcement::factory()->create(['event_id' => $run->id]);
+
+    $this->actingAs($this->admin)
+        ->delete(route('running.manage.events.destroy', $run))
+        ->assertSessionHas('success');
+
+    expect($announcement->fresh()?->event_id)->toBeNull();
 });

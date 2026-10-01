@@ -53,11 +53,11 @@ class RsvpConfirmed extends Notification implements ShouldQueue
         }
 
         if ($this->extras > 0) {
-            $message->line('You said you\'re bringing '.$this->extras.' extra '.($this->extras === 1 ? 'runner' : 'runners').'.');
+            $message->line("You said you're bringing {$this->extras} {$event->extrasNoun($this->extras)}.");
         }
 
         return $message
-            ->action('View the '.strtolower($event->typeLabel()), route('running.events.show', $event))
-            ->line('Plans changed? You can cancel or change your extra runners on the '.strtolower($event->typeLabel()).' page.');
+            ->action('View the '.$event->noun(), route('running.events.show', $event))
+            ->line("Plans changed? You can cancel or change how many people you're bringing on the {$event->noun()} page.");
     }
 }

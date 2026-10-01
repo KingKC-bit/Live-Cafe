@@ -32,7 +32,7 @@ class RsvpException extends RuntimeException
 
     public static function cannotAddExtras(Event $event): self
     {
-        return new self('RSVPs closed at '.self::closingTime($event).'. You can still lower your extra runners or cancel your RSVP.');
+        return new self('RSVPs closed at '.self::closingTime($event).'. You can still bring fewer people or cancel your RSVP.');
     }
 
     public static function notGoing(Event $event): self

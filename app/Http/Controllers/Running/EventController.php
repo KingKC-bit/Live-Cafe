@@ -38,7 +38,7 @@ class EventController extends Controller
                 ->keyBy('event_id')
             : collect();
 
-        $announcement = Announcement::query()->published()->forDisplay()->first();
+        $announcement = Announcement::query()->published()->forDisplay()->with('event')->first();
         $announcementCount = Announcement::query()->published()->count();
 
         return view('running.index', compact('events', 'myRsvps', 'announcement', 'announcementCount'));

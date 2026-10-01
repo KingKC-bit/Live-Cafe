@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Announcement;
 use App\Models\Event;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Seeder;
@@ -16,7 +17,7 @@ class EventSeeder extends Seeder
         $lastSaturday = now()->previous(CarbonInterface::SATURDAY);
 
         // The club's Saturday run.
-        Event::create([
+        $saturdayRun = Event::create([
             'title' => 'Saturday Run',
             'type' => Event::TYPE_RUN,
             'event_date' => $nextSaturday->format('Y-m-d'),
@@ -26,6 +27,12 @@ class EventSeeder extends Seeder
             'dress_code' => 'Black and pink',
             'description' => 'Our weekly Saturday 5 km from 102 Rivonia Road. All paces welcome.',
         ]);
+
+        // The pinned announcement about this run's dress code links to it, so
+        // members can open the run and RSVP from the announcement.
+        Announcement::query()
+            ->where('title', 'Black and pink this Saturday')
+            ->update(['event_id' => $saturdayRun->id]);
 
         // Last week's run, so the admin page has some history.
         Event::create([

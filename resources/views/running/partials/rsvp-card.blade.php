@@ -5,7 +5,7 @@
     neutral: it says when RSVPs close, never that someone can't come.
 --}}
 @php
-    $noun = $event->isRun() ? 'run' : 'event';
+    $noun = $event->noun();
     $closesAt = $event->rsvpClosesAt()->format('D j M, H:i');
     $user = auth()->user();
 @endphp
@@ -40,12 +40,12 @@
 
     @elseif ($myRsvp?->isGoing())
         <p class="rc-going">
-            You're going{{ $myRsvp->extras > 0 ? ' with '.$myRsvp->extras.' extra '.\Illuminate\Support\Str::plural('runner', $myRsvp->extras) : '' }}.
+            You're going{{ $myRsvp->extras > 0 ? ' with '.$myRsvp->extras.' '.$event->extrasNoun($myRsvp->extras) : '' }}.
         </p>
 
         <form method="POST" action="{{ route('running.rsvp.store', $event) }}">
             @csrf
-            <label class="rc-label" for="extras">Extra runners</label>
+            <label class="rc-label" for="extras">{{ ucfirst($event->extrasNoun()) }}</label>
             <span class="rc-hint" id="extras-hint">
                 @if ($event->rsvpIsOpen())
                     How many people you're bringing. No names needed.
@@ -56,6 +56,7 @@
             @include('running.partials.stepper', [
                 'value' => $myRsvp->extras,
                 'max' => $event->rsvpIsOpen() ? 99 : $myRsvp->extras,
+                'extraNoun' => $event->extrasNoun(1),
             ])
             @error('extras') <p class="rc-error">{{ $message }}</p> @enderror
             <button type="submit" class="rc-btn rc-btn-primary rc-btn-block">Update my RSVP</button>
@@ -73,8 +74,8 @@
         <form method="POST" action="{{ route('running.rsvp.store', $event) }}">
             @csrf
             <label class="rc-label" for="extras">Bringing anyone?</label>
-            <span class="rc-hint" id="extras-hint">Add extra runners. No names needed.</span>
-            @include('running.partials.stepper', ['value' => 0])
+            <span class="rc-hint" id="extras-hint">Add {{ $event->extrasNoun() }}. No names needed.</span>
+            @include('running.partials.stepper', ['value' => 0, 'extraNoun' => $event->extrasNoun(1)])
             @error('extras') <p class="rc-error">{{ $message }}</p> @enderror
             <button type="submit" class="rc-btn rc-btn-primary rc-btn-block">RSVP</button>
         </form>

@@ -9,6 +9,8 @@
         padding: 0.5rem 0 1.25rem;
     }
 
+    .rc-manage-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
     .rc-tabs {
         display: flex;
         gap: 0.5rem;
@@ -43,7 +45,11 @@
 
     /* Tables scroll sideways inside their box on small screens instead of
        making the whole page scroll. */
+    /* position: relative keeps the hidden "Actions" header label inside the
+       scroll area. Without it that label sits past the table's right edge
+       and makes the whole page scroll sideways on a phone. */
     .rc-table-wrap {
+        position: relative;
         overflow-x: auto;
         background: var(--white);
         border: 1px solid var(--sage);
@@ -102,6 +108,7 @@
     .rc-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem 1.5rem; }
     .rc-field { display: flex; flex-direction: column; }
     .rc-field-wide { grid-column: 1 / -1; }
+    .rc-field[hidden] { display: none; }
     .rc-field label, .rc-field legend { font-weight: 600; font-size: 0.9rem; color: var(--ink); margin-bottom: 0.35rem; }
     .rc-optional { color: var(--slate); font-weight: 400; }
 
@@ -109,6 +116,7 @@
     .rc-field input[type="date"],
     .rc-field input[type="time"],
     .rc-field input[type="number"],
+    .rc-field select,
     .rc-field textarea {
         font-family: var(--font-body);
         font-size: 0.95rem;
@@ -120,7 +128,7 @@
         width: 100%;
     }
 
-    .rc-field input:focus, .rc-field textarea:focus { outline: 2px solid var(--green); outline-offset: 1px; border-color: var(--green); }
+    .rc-field input:focus, .rc-field select:focus, .rc-field textarea:focus { outline: 2px solid var(--green); outline-offset: 1px; border-color: var(--green); }
     .rc-field textarea { min-height: 140px; resize: vertical; line-height: 1.55; }
 
     .rc-field fieldset { border: none; padding: 0; margin: 0; }

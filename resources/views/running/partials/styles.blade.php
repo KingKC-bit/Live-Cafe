@@ -393,6 +393,8 @@
     /* ── Simple page header (announcements, my RSVPs) ── */
     .rc-page-head { padding: 0.5rem 0 1.25rem; border-bottom: 1px solid var(--sage); margin-bottom: 0.5rem; }
     .rc-page-title { font-family: var(--font-display); font-size: clamp(1.8rem, 3.5vw, 2.3rem); color: var(--ink); margin-top: 0.4rem; }
+    .rc-page-lead { color: var(--slate); margin-top: 0.4rem; }
+    .rc-page-head + .rc-admin-bar { margin-top: 1.5rem; }
 
     .rc-list-card { padding: 1.4rem 0; border-bottom: 1px solid var(--sage); }
     .rc-list-card h2 { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 0.35rem; }
@@ -401,6 +403,39 @@
     .rc-list-card .rc-announcement-body { margin-bottom: 0.5rem; }
 
     .rc-article-body { margin-top: 1.25rem; }
+
+    .rc-announcement-link { margin: -0.25rem 0 0.9rem; }
+    .rc-article-body + .rc-announcement-link { margin-top: 1.5rem; }
+
+    /* ── Admin shortcuts (only admins see these) ── */
+    .rc-admin-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem 1.5rem;
+        flex-wrap: wrap;
+        background: var(--white);
+        border: 1px dashed var(--green);
+        padding: 0.85rem 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .rc-admin-bar-label {
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--slate);
+    }
+
+    .rc-admin-bar-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem 1rem;
+        flex-wrap: wrap;
+    }
+
+    .rc-admin-bar .rc-link { font-size: 0.85rem; }
 
     @media (max-width: 860px) {
         .rc-hero-inner { grid-template-columns: 1fr; gap: 1.5rem; }
