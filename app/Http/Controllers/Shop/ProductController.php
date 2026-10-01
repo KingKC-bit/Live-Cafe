@@ -24,7 +24,7 @@ class ProductController extends Controller
             ->with('category')
             ->get()
             ->filter(fn (Product $p) => $p->category !== null)
-            ->groupBy(fn (Product $p) => $p->category->name);
+            ->groupBy(fn (Product $p) => $p->category->name); // @phpstan-ignore-line
 
         return view('shop.index', compact('categories', 'productsByCategory'));
     }

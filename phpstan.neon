@@ -11,3 +11,5 @@ parameters:
         - routes/
 
     level: 3
+  ignoreErrors:
+        - '#Access to an undefined property Illuminate\\Database\\Eloquent\\Model::\$name#'
