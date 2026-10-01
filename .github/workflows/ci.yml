@@ -62,7 +62,7 @@ jobs:
           sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
           sed -i 's/^DB_HOST=.*/DB_HOST=127.0.0.1/' .env
           sed -i 's/^DB_PORT=.*/DB_PORT=3306/' .env
-          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=live_cafe_test/' .env
+          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=testing/' .env
           sed -i 's/^DB_USERNAME=.*/DB_USERNAME=sail/' .env
           sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=password/' .env
           sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=array/' .env
@@ -81,6 +81,14 @@ jobs:
             echo "Attempt $i — waiting 2s..."
             sleep 2
           done
+
+      - name: Create testing database and grant permissions
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -uroot -proot -e "
+            CREATE DATABASE IF NOT EXISTS testing;
+            GRANT ALL PRIVILEGES ON testing.* TO 'sail'@'%';
+            FLUSH PRIVILEGES;
+          "
 
       - name: Verify DB config
         run: grep "^DB_" .env
