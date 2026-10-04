@@ -2,17 +2,21 @@
 
 namespace App\Providers;
 
+use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\CreatesNewUsers;
+use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\VerifyEmailResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-
     /**
      * Register any application services.
      */
@@ -20,28 +24,27 @@ class FortifyServiceProvider extends ServiceProvider
     {
         // Your existing LoginResponse binding
         $this->app->singleton(
-            \Laravel\Fortify\Contracts\LoginResponse::class,
+            LoginResponse::class,
             \App\Actions\Fortify\LoginResponse::class
         );
 
         // Your existing RegisterResponse binding
         $this->app->singleton(
-            \Laravel\Fortify\Contracts\RegisterResponse::class,
+            RegisterResponse::class,
             \App\Actions\Fortify\RegisterResponse::class
         );
 
         // ADD THIS: Overrides the redirect engine AFTER clicking the Mailpit link
         $this->app->singleton(
-            \Laravel\Fortify\Contracts\VerifyEmailResponse::class,
+            VerifyEmailResponse::class,
             \App\Actions\Fortify\VerifyEmailResponse::class
         );
 
         $this->app->singleton(
-            \Laravel\Fortify\Contracts\CreatesNewUsers::class,
-            \App\Actions\Fortify\CreateNewUser::class
+            CreatesNewUsers::class,
+            CreateNewUser::class
         );
     }
-
 
     /**
      * Bootstrap any application services.

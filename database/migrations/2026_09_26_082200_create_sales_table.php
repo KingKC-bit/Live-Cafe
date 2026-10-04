@@ -35,7 +35,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->enum('status', [ 'pending', 'confirmed', 'collected', 'cancelled', ])->default('pending');
+            $table->enum('status', ['pending', 'confirmed', 'collected', 'cancelled'])->default('pending');
             $table->index('occurred_at');
         });
     }

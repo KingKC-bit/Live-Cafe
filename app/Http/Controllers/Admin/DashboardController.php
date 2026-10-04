@@ -16,23 +16,22 @@ class DashboardController extends Controller
     public function index(): View
     {
         $stats = [
-            'totalUsers'        => User::count(),
-            'totalProducts'     => Product::count(),
+            'totalUsers' => User::count(),
+            'totalProducts' => Product::count(),
             'availableProducts' => Product::where('prod_availability', true)
-                                         ->where('quantity', '>', 0)
-                                         ->count(),
-            'ordersToday'       => Order::whereDate('created_at', today())
-                                        ->whereIn('status', ['pending', 'confirmed'])
-                                        ->count(),
-            'revenueToday'      => Sale::whereDate('occurred_at', today())
-                                       ->where('status', 'collected')
-                                       ->sum('total'),
-            'upcomingEvents'    => Event::where('event_date', '>=', now()->toDateString())
-                                        ->where('event_date', '<=', now()->addDays(30)->toDateString())
-                                        ->count(),
-            'totalRsvps'        => Rsvp::whereHas('event', fn ($q) =>
-                                        $q->where('event_date', '>=', now()->toDateString())
-                                    )->count(),
+                ->where('quantity', '>', 0)
+                ->count(),
+            'ordersToday' => Order::whereDate('created_at', today())
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->count(),
+            'revenueToday' => Sale::whereDate('occurred_at', today())
+                ->where('status', 'collected')
+                ->sum('total'),
+            'upcomingEvents' => Event::where('event_date', '>=', now()->toDateString())
+                ->where('event_date', '<=', now()->addDays(30)->toDateString())
+                ->count(),
+            'totalRsvps' => Rsvp::whereHas('event', fn ($q) => $q->where('event_date', '>=', now()->toDateString())
+            )->count(),
         ];
 
         $recentOrders = Order::with('user')
