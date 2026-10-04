@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class ProductIngredient extends Pivot
 {
     protected $table = 'product_ingredients';
-    
+
     protected $primaryKey = null;
+
     public $incrementing = false;
 
     public $timestamps = false;

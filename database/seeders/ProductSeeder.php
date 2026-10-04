@@ -215,7 +215,7 @@ class ProductSeeder extends Seeder
         foreach ($products as $data) {
             $category = Category::where('name', $data['category'])->first();
 
-            if (!$category) {
+            if (! $category) {
                 throw new RuntimeException(
                     "Category [{$data['category']}] not found."
                 );
@@ -233,7 +233,7 @@ class ProductSeeder extends Seeder
             foreach ($data['ingredients'] as $ingredientName => $quantityRequired) {
                 $ingredient = Ingredient::where('name', $ingredientName)->first();
 
-                if (!$ingredient) {
+                if (! $ingredient) {
                     throw new RuntimeException(
                         "Ingredient [{$ingredientName}] not found."
                     );

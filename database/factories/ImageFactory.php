@@ -20,7 +20,7 @@ class ImageFactory extends Factory
 
             'imageable_type' => Product::class,
 
-            'path' => 'products/' . fake()->unique()->slug() . '.jpg',
+            'path' => 'products/'.fake()->unique()->slug().'.jpg',
 
             'alt_text' => fake()->sentence(5),
 

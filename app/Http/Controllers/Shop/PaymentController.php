@@ -14,10 +14,10 @@ class PaymentController extends Controller
     public function initialize(Request $request)
     {
         // Paystack expects amount in cents (e.g. R150.00 = 15000 cents)
-        $amountInCents = $request->amount * 100; 
+        $amountInCents = $request->amount * 100;
 
         $response = Http::withToken(config('services.paystack.secret'))
-            ->post(config('services.paystack.url') . '/transaction/initialize', [
+            ->post(config('services.paystack.url').'/transaction/initialize', [
                 'email' => auth()->user()->email,
                 'amount' => $amountInCents,
                 'callback_url' => route('shop.payment.callback'),
@@ -38,7 +38,7 @@ class PaymentController extends Controller
         $reference = $request->query('reference');
 
         $response = Http::withToken(config('services.paystack.secret'))
-            ->get(config('services.paystack.url') . "/transaction/verify/{$reference}");
+            ->get(config('services.paystack.url')."/transaction/verify/{$reference}");
 
         if ($response->successful() && $response->json()['data']['status'] === 'success') {
             // Payment successful! Your teammate can handle order status logic here

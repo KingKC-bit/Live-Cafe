@@ -15,7 +15,7 @@ class ImageSeeder extends Seeder
             Image::factory()
                 ->forProduct($product)
                 ->create([
-                    'path' => 'products/' . Str::slug($product->name) . '.jpg',
+                    'path' => 'products/'.Str::slug($product->name).'.jpg',
                     'alt_text' => $product->name,
                     'sort_order' => 0,
                 ]);

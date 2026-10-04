@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SalesDetail;
 use App\Models\User;
-use carbon\CarbonImmutable;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Seeder;
 use RuntimeException;
 

@@ -20,11 +20,11 @@ Route::prefix('shop')->name('shop.')->group(function () {
     // 1. Public Routes — Product browsing (no login required)
     Route::get('/', [ProductController::class, 'index'])->name('index');
     Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
-    
+
     // 2. Authenticated & Verified Customers Only
     // Everything in this group is blocked until the user signs up and clicks their email link
     Route::middleware(['auth', 'verified'])->group(function () {
-    
+
         // Cart Management
         Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
         Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');

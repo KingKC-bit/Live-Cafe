@@ -22,7 +22,6 @@ return new class extends Migration
              * values are formally decided.
              */
 
-
             $table->decimal('total', 10, 2);
 
             $table->dateTime('collection_time');

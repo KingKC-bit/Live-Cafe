@@ -2,15 +2,12 @@ name: Laravel CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   laravel-tests:
-
     runs-on: ubuntu-latest
 
     services:
@@ -30,22 +27,32 @@ jobs:
           --health-retries=5
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: '8.4'
           extensions: mbstring, pdo, pdo_mysql
           coverage: none
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
       - name: Copy environment file
         run: cp .env.example .env
 
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build frontend assets
+        run: npm run build
 
       - name: Generate application key
         run: php artisan key:generate
@@ -55,12 +62,42 @@ jobs:
           sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' .env
           sed -i 's/^DB_HOST=.*/DB_HOST=127.0.0.1/' .env
           sed -i 's/^DB_PORT=.*/DB_PORT=3306/' .env
-          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=live_cafe_test/' .env
+          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=testing/' .env
           sed -i 's/^DB_USERNAME=.*/DB_USERNAME=sail/' .env
           sed -i 's/^DB_PASSWORD=.*/DB_PASSWORD=password/' .env
+          sed -i 's/^SESSION_DRIVER=.*/SESSION_DRIVER=array/' .env
+          sed -i 's/^SESSION_LIFETIME=.*/SESSION_LIFETIME=120/' .env
+          sed -i 's/^CACHE_STORE=.*/CACHE_STORE=array/' .env
+          sed -i 's/^QUEUE_CONNECTION=.*/QUEUE_CONNECTION=sync/' .env
 
-      - name: Run database migrations
+      - name: Clear config cache
+        run: php artisan config:clear
+
+      - name: Wait for MySQL
+        run: |
+          echo "Waiting for MySQL..."
+          for i in {1..30}; do
+            mysqladmin ping -h 127.0.0.1 -P 3306 -uroot -proot --silent 2>/dev/null && echo "MySQL ready after $i attempts" && break
+            echo "Attempt $i — waiting 2s..."
+            sleep 2
+          done
+
+      - name: Create testing database and grant permissions
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -uroot -proot -e "
+            CREATE DATABASE IF NOT EXISTS testing;
+            GRANT ALL PRIVILEGES ON testing.* TO 'sail'@'%';
+            FLUSH PRIVILEGES;
+          "
+
+      - name: Verify DB config
+        run: grep "^DB_" .env
+
+      - name: Run migrations
         run: php artisan migrate --force
+
+      - name: Run style check
+        run: ./vendor/bin/pint --test
 
       - name: Run tests
         run: php artisan test
