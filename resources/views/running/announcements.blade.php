@@ -14,7 +14,7 @@
     <header class="rc-page-head">
         <p class="rc-eyebrow">Live Cafe</p>
         <h1 class="rc-page-title">Announcements</h1>
-        <p class="rc-page-lead">News from the cafe, from new flavours to run club updates.</p>
+        <p class="rc-page-lead">See announcements from the cafe.</p>
     </header>
 
     @include('running.partials.admin-bar')
