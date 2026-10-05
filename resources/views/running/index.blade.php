@@ -14,8 +14,7 @@
             <p class="rc-eyebrow">Live Running Club</p>
             <h1 class="rc-hero-title">Runs and events</h1>
             <p class="rc-hero-lead">
-                All paces welcome on our runs. RSVPs close eight hours before each start,
-                so the organisers know roughly how many people to expect.
+                Everyone is welcome to join our running club! RSVP for upcoming runs 8 hours in advance to help our planning.
             </p>
         </div>
         <img class="rc-hero-photo"
