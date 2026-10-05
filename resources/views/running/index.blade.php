@@ -60,7 +60,7 @@
     @forelse ($events as $event)
         @include('running.partials.event-row', ['event' => $event, 'myRsvp' => $myRsvps->get($event->id)])
     @empty
-        <p class="rc-empty">Nothing on the calendar right now. Check back soon.</p>
+        <p class="rc-empty">No upcoming Events</p>
     @endforelse
 
     @guest
