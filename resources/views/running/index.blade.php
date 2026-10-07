@@ -18,7 +18,7 @@
             </p>
         </div>
         <img class="rc-hero-photo"
-             src="{{ asset('images/running/club-group.jpg') }}"
+             src="{{ asset('images/running/run-club Holder (1).jpg') }}"
              alt="Live Running Club members together after a run"
              width="544" height="392">
     </div>

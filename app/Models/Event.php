@@ -55,16 +55,11 @@ class Event extends Model
     public const STATUS_CANCELLED = 'cancelled';
 
     /**
-     * Fallback photos (in public/images/running) for runs without an upload.
+     * Placeholder photo (in public/images/running) for runs without an upload.
      * Events don't get one, because a running photo would be wrong for, say,
      * a coffee tasting.
      */
-    private const FALLBACK_PHOTOS = [
-        'images/running/run-pack.jpg',
-        'images/running/run-pink.jpg',
-        'images/running/run-road.jpg',
-        'images/running/crew.jpg',
-    ];
+    private const PLACEHOLDER_PHOTO = 'images/running/run-Holder.png';
 
     protected $fillable = [
         'title',
@@ -302,7 +297,7 @@ class Event extends Model
     }
 
     /**
-     * The uploaded photo, a club photo for a run without one, or null for an
+     * The uploaded photo, the placeholder for a run without one, or null for an
      * event without one.
      */
     public function photoUrl(): ?string
@@ -315,7 +310,7 @@ class Event extends Model
             return null;
         }
 
-        return asset(self::FALLBACK_PHOTOS[$this->id % count(self::FALLBACK_PHOTOS)]);
+        return asset(self::PLACEHOLDER_PHOTO);
     }
 
     public function mapUrl(): string
