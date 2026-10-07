@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Announcement;
 use App\Models\Event;
 use App\Models\Product;
 use Illuminate\View\View;
@@ -25,6 +26,13 @@ class HomeController extends Controller
             ->take(4)
             ->get();
 
-        return view('home', compact('featuredProducts', 'upcomingEvents'));
+        // Newest published announcement for the "What we offer" card (drafts and scheduled ones are left out)
+        $latestAnnouncement = Announcement::published()
+            ->where('published_at', '>=', now()->subDays(10))
+            ->latest('published_at')
+            ->latest('id')
+            ->first();
+
+        return view('home', compact('featuredProducts', 'upcomingEvents', 'latestAnnouncement'));
     }
 }

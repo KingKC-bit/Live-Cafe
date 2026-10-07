@@ -173,6 +173,7 @@
     }
 
     .feature-card a:hover { color: var(--accent); }
+    .feature-card a + a { margin-left: 1rem; }
 
     /* ── Shop strip ── */
     .shop-strip {
@@ -397,9 +398,16 @@
 
             <div class="feature-card">
                 <div class="feature-card-icon">📣</div>
-                <h3>Announcements</h3>
-                <p>Stay up to date with what's happening at Live Cafe — new products, special events, and club news.</p>
-                <a href="{{ route('running.announcements.index') }}">Read announcements</a>
+                @if ($latestAnnouncement)
+                    <h3>Announcements</h3>
+                    <p>{{ \Illuminate\Support\Str::limit($latestAnnouncement->description, 140) }}</p>
+                    <a href="{{ route('running.announcements.show', $latestAnnouncement) }}">Read more</a>
+                    <a href="{{ route('running.announcements.index') }}">View all</a>
+                @else
+                    <h3>Announcements</h3>
+                    <p>Stay up to date with what's happening at Live Cafe — new products, special events, and club news.</p>
+                    <a href="{{ route('running.announcements.index') }}">Read announcements</a>
+                @endif
             </div>
         </div>
     </div>
