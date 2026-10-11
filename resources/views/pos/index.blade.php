@@ -222,14 +222,16 @@
 @endpush
 
 @section('content')
-<div class="pos-wrap">
-    <div class="pos-header">
-        <div>
-            <h1>Point of Sale</h1>
-            <p>{{ auth()->user()->name }} {{ auth()->user()->surname }} &mdash; {{ now()->format('l, d F Y') }}</p>
-        </div>
+<div class="pos-header">
+    <div>
+        <h1>Point of Sale</h1>
+        <p>{{ auth()->user()->name }} {{ auth()->user()->surname }} &mdash; {{ now()->format('l, d F Y') }}</p>
     </div>
-
+    <a href="{{ route('pos.sale.store') }}"
+       style="background:var(--green);color:var(--white);padding:0.6rem 1.25rem;text-decoration:none;font-size:0.875rem;font-weight:600;border-radius:3px;">
+        View sales &amp; orders
+    </a>
+</div>
     <div class="pos-grid">
 
         {{-- Product selection panel --}}

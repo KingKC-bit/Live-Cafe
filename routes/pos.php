@@ -21,13 +21,19 @@ Route::prefix('pos')
         // POS terminal interface
         Route::get('/', [PosController::class, 'index'])->name('index');
 
-        // Process a new sale (online)
+        // Process a new sale
         Route::post('/sale', [PosController::class, 'store'])->name('sale.store');
 
-        // View sale history (staff's own sales, admin sees all via admin panel)
+        // Sales review page — POS sales + online orders pending collection
         Route::get('/sales', [PosController::class, 'sales'])->name('sales.index');
         Route::get('/sales/{sale}', [PosController::class, 'show'])->name('sales.show');
 
-        // Offline sync — receives queued browser sales for revalidation
+        // Mark an online order as collected at the counter
+        Route::patch('/orders/{order}/collect', [PosController::class, 'collectOrder'])->name('orders.collect');
+
+        // Order ID lookup via AJAX
+        Route::get('/orders/{order}/lookup', [PosController::class, 'lookupOrder'])->name('orders.lookup');
+
+        // Offline sync
         Route::post('/sync', [PosController::class, 'sync'])->name('sync');
     });
