@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -294,3 +295,10 @@
     @stack('scripts')
 </body>
 </html>
+=======
+<x-layouts::app.sidebar :title="$title ?? null">
+    <flux:main>
+        {{ $slot }}
+    </flux:main>
+</x-layouts::app.sidebar>
+>>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3

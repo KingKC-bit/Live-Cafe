@@ -13,6 +13,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+<<<<<<< HEAD
     services:
       mysql:
         image: mysql:8.0
@@ -32,17 +33,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+=======
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+>>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3
         with:
           persist-credentials: false
 
       - name: Setup PHP
+<<<<<<< HEAD
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+=======
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+>>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3
         with:
           php-version: '8.5'
           tools: composer:v2
           coverage: none
 
       - name: Setup Node
+<<<<<<< HEAD
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
           node-version: '22'
@@ -100,3 +111,14 @@ jobs:
 
       - name: Run CI checks
         run: composer ci:check
+=======
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '22'
+
+      - name: Setup Application
+        run: composer setup
+
+      - name: Run CI Checks
+        run: composer ci:check
+>>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3

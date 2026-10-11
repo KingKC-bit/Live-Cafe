@@ -16,7 +16,12 @@
         "laravel/tinker": "^3.0",
         "livewire/blaze": "^1.0",
         "livewire/flux": "^2.13.1",
+<<<<<<< HEAD
         "livewire/livewire": "^4.1"
+=======
+        "livewire/livewire": "^4.1",
+        "zfhassaan/payfast": "^1.0"
+>>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",

@@ -143,7 +143,10 @@ return [
     */
 
     'features' => [
+<<<<<<< HEAD
         Features::registration(),
+=======
+>>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3
         Features::resetPasswords(),
         Features::emailVerification(),
     ],
