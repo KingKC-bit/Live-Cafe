@@ -15,6 +15,7 @@
                 :value="old('name')"
                 type="text"
                 required
+                maxlength="100"
                 autofocus
                 autocomplete="given-name"
                 placeholder="Jane"
@@ -27,6 +28,7 @@
                 :value="old('surname')"
                 type="text"
                 required
+                maxlength="100"
                 autocomplete="family-name"
                 placeholder="Doe"
             />
@@ -38,6 +40,7 @@
                 :value="old('email')"
                 type="email"
                 required
+                maxlength="255"
                 autocomplete="email"
                 placeholder="email@example.com"
             />
@@ -47,8 +50,9 @@
                 name="phone_number"
                 :label="__('Phone number')"
                 :value="old('phone_number')"
-                type="text"
+                type="tel"
                 required
+                maxlength="20"
                 autocomplete="tel"
                 placeholder="+27 81 234 5678"
             />
@@ -86,7 +90,7 @@
             </flux:button>
         </form>
 
-        <div class="text-center text-sm text-zinc-600">
+        <div class="text-sm text-[#5F5A66]">
             Already have an account?
             <flux:link :href="route('login')" wire:navigate>Sign in</flux:link>
         </div>

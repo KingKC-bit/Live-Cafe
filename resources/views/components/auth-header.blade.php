@@ -1,9 +1,13 @@
 @props([
     'title',
-    'description',
+    'description' => null,
+    'eyebrow' => __('Your account'),
 ])
 
-<div class="flex w-full flex-col text-center">
-    <flux:heading size="xl" level="1">{{ $title }}</flux:heading>
-    <flux:subheading>{{ $description }}</flux:subheading>
+<div class="flex w-full flex-col gap-2">
+    <p class="text-xs font-bold uppercase tracking-[0.14em] text-[#632E62]">{{ $eyebrow }}</p>
+    <h1 class="text-3xl font-extrabold text-[#17131B]">{{ $title }}</h1>
+    @if ($description)
+        <p class="text-sm text-[#5F5A66]">{{ $description }}</p>
+    @endif
 </div>
