@@ -2,12 +2,12 @@
     <div class="flex flex-col gap-6">
         <x-auth-header :title="__('Verify your email')" />
 
-        <flux:text>
+        <flux:text class="auth-lead">
             {{ __('Please verify your email address by clicking on the link we just emailed to you.') }}
         </flux:text>
 
         @if (session('status') == 'verification-link-sent')
-            <flux:text class="font-medium !dark:text-green-400 !text-green-600">
+            <flux:text class="auth-status">
                 {{ __('A new verification link has been sent to the email address you provided during registration.') }}
             </flux:text>
         @endif

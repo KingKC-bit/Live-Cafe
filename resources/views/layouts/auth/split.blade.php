@@ -13,28 +13,35 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        /* ── Sign-in tokens ── */
+        /* ── Tokens: the same values as layouts/app.blade.php, so these pages match the rest of the site ── */
         .auth {
-            --auth-plum:   #632E62;
-            --auth-pink:   #FCBDE8;
-            --auth-lime:   #B8F56A;
-            --auth-ink:    #17131B;
-            --auth-muted:  #5F5A66;
-            --auth-line:   #E5DDE8;
+            --green:       #B598A3; /* mauve */
+            --accent:      #86A96F; /* matcha */
+            --base:        #F0EEE9;
+            --green-light: #9D7E8B;
+            --sage:        #DCD3D7;
+            --slate:       #4A5568;
+            --ink:         #1A1A1A;
+            --white:       #FFFFFF;
+            --danger:      #C0392B;
+            --success:     #27AE60;
 
-            /* Flux reads these for primary buttons and links */
-            --color-accent: var(--auth-ink);
-            --color-accent-content: var(--auth-plum);
-            --color-accent-foreground: #FFFFFF;
+            --font-body:    'DM Sans', sans-serif;
+            --font-display: 'Playfair Display', serif;
 
-            font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
-            color: var(--auth-ink);
-            background: #FFFFFF;
+            /* Flux reads these for its primary button, tick box and links */
+            --color-accent: var(--accent);
+            --color-accent-content: var(--ink);
+            --color-accent-foreground: var(--ink);
+
+            font-family: var(--font-body);
+            color: var(--ink);
+            background: var(--base);
             min-height: 100svh;
             display: grid;
             grid-template-rows: auto 1fr;
@@ -47,11 +54,12 @@
             }
         }
 
-        /* ── Brand panel ── */
+        /* ── Brand panel: the mauve of the nav and home page hero ── */
         .auth-brand {
-            background: var(--auth-plum);
-            color: #FFFFFF;
-            padding: 1.5rem 1.25rem;
+            background: var(--green);
+            color: var(--white);
+            padding: 0.75rem 1.25rem;
+            border-bottom: 2px solid var(--accent);
         }
 
         .auth-brand-inner {
@@ -59,21 +67,12 @@
             margin: 0 auto;
         }
 
-        .auth-wordmark {
-            display: inline-flex;
-            gap: 0.4rem;
-            text-decoration: none;
+        .auth-logo img {
+            display: block;
+            height: 44px;
+            width: auto;
+            object-fit: contain;
         }
-
-        .auth-wordmark span {
-            padding: 0.2rem 0.6rem;
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--auth-ink);
-        }
-
-        .auth-wordmark .live { background: var(--auth-pink); letter-spacing: 0.12em; }
-        .auth-wordmark .cafe { background: var(--auth-lime); }
 
         .auth-tagline,
         .auth-photo,
@@ -84,6 +83,8 @@
                 display: flex;
                 align-items: center;
                 padding: 4rem 5rem;
+                border-bottom: none;
+                border-right: 2px solid var(--accent);
             }
 
             .auth-brand-inner { margin: 0; max-width: 32rem; }
@@ -93,26 +94,30 @@
             .auth-badge { display: inline-block; }
         }
 
+        /* Same as the home page hero's label */
         .auth-eyebrow {
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--auth-lime);
+            display: inline-block;
+            background: var(--accent);
+            color: var(--ink);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            padding: 0.3rem 0.75rem;
         }
 
         .auth-headline {
-            margin-top: 0.75rem;
-            font-size: clamp(2rem, 3vw, 2.4rem);
-            font-weight: 800;
-            line-height: 1.15;
+            margin-top: 1.25rem;
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 3.4vw, 2.9rem);
+            font-weight: 700;
+            line-height: 1.1;
         }
 
         .auth-subline {
-            margin-top: 0.75rem;
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--auth-pink);
+            margin-top: 0.9rem;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .auth-photo {
@@ -121,12 +126,12 @@
             width: min(100%, 21.5rem);
         }
 
-        /* Lime block peeking out behind the photo */
+        /* Matcha block peeking out behind the photo */
         .auth-photo::before {
             content: '';
             position: absolute;
             inset: 0.75rem -0.75rem -0.75rem 0.75rem;
-            background: var(--auth-lime);
+            background: var(--accent);
         }
 
         .auth-photo img {
@@ -137,23 +142,25 @@
             object-fit: cover;
         }
 
+        /* Same as the run club's badges */
         .auth-badge {
             margin-top: 2.5rem;
-            padding: 0.15rem 0.5rem;
-            background: var(--auth-lime);
-            color: var(--auth-ink);
+            padding: 0.25rem 0.55rem;
+            border-radius: 3px;
+            background: var(--accent);
+            color: var(--ink);
             font-size: 0.68rem;
-            font-weight: 800;
-            letter-spacing: 0.12em;
+            font-weight: 700;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
         }
 
-        /* ── Form side ── */
+        /* ── Form side: a white card on the cream page, like the run club cards ── */
         .auth-main {
             display: flex;
             align-items: flex-start;
             justify-content: center;
-            padding: 2.5rem 1.25rem 3rem;
+            padding: 2rem 1rem 3rem;
         }
 
         @media (min-width: 1024px) {
@@ -163,69 +170,118 @@
             }
         }
 
-        .auth-form-wrap {
+        .auth-card {
             width: 100%;
-            max-width: 26rem;
+            max-width: 28rem;
+            background: var(--white);
+            border: 1px solid var(--sage);
+            padding: 2rem 1.25rem;
+        }
+
+        @media (min-width: 640px) {
+            .auth-card { padding: 2.5rem 2.25rem; }
+        }
+
+        .auth-kicker {
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--slate);
+        }
+
+        .auth-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.15;
+            color: var(--ink);
+        }
+
+        .auth-lead,
+        .auth-note {
+            color: var(--slate);
+            font-size: 0.9rem;
+        }
+
+        /* Same as the site's green message box (.flash-success in layouts/app) */
+        .auth-status {
+            padding: 0.85rem 1.2rem;
+            border-left: 4px solid var(--success);
+            background: #edfaf3;
+            color: #1a5c38;
+            font-size: 0.9rem;
+            font-weight: 400;
         }
 
         .auth-back {
             margin-top: 2rem;
             padding-top: 1.5rem;
-            border-top: 1px solid var(--auth-line);
+            border-top: 1px solid var(--sage);
             font-size: 0.875rem;
         }
 
-        /* ── Flux components, squared off to match the brand ── */
+        /* ── Flux components, styled like the site's own forms ── */
         .auth [data-flux-label] {
-            color: var(--auth-ink);
-            font-weight: 500;
+            color: var(--ink);
+            font-size: 0.9rem;
+            font-weight: 600;
         }
 
         .auth input[data-flux-control] {
-            border-radius: 0;
-            border-color: var(--auth-line);
-            box-shadow: none;
             height: 2.75rem;
-            background: #FFFFFF;
-        }
-
-        .auth input[data-flux-control][data-invalid] {
-            border-color: #DC2626;
+            border: 1.5px solid var(--sage);
+            border-radius: 3px;
+            box-shadow: none;
+            background: var(--white);
+            color: var(--ink);
+            font-family: var(--font-body);
         }
 
         .auth input:focus[data-flux-control] {
             --tw-ring-color: transparent;
             --tw-ring-offset-width: 0;
-            outline: 2px solid var(--auth-plum);
-            outline-offset: -2px;
-            border-color: var(--auth-plum);
+            outline: 2px solid var(--green);
+            outline-offset: 1px;
+            border-color: var(--green);
+        }
+
+        /* After the focus rule, so a field with an error stays red while you're typing in it */
+        .auth input[data-flux-control][data-invalid] {
+            border-color: var(--danger);
+        }
+
+        .auth [data-flux-error] {
+            color: var(--danger);
         }
 
         .auth [data-flux-button][type="submit"] {
-            border-radius: 0;
             height: 2.75rem;
-            font-weight: 700;
+            border-radius: 3px;
+            font-family: var(--font-body);
+            font-weight: 600;
         }
 
         .auth [data-flux-checkbox] [data-flux-checkbox-indicator] {
-            border-radius: 0;
+            border-radius: 3px;
         }
 
         .auth [data-flux-link] {
-            color: var(--auth-plum);
+            color: var(--ink);
+            font-weight: 600;
             text-decoration: none;
+            border-bottom: 1.5px solid var(--accent);
         }
 
-        .auth [data-flux-link]:hover { text-decoration: underline; }
+        .auth [data-flux-link]:hover { color: var(--green-light); }
     </style>
 </head>
 <body class="antialiased">
     <div class="auth">
         <aside class="auth-brand">
             <div class="auth-brand-inner">
-                <a href="{{ route('home') }}" class="auth-wordmark" aria-label="Live Cafe home">
-                    <span class="live">LIVE</span>
-                    <span class="cafe">café</span>
+                <a href="{{ route('home') }}" class="auth-logo">
+                    <img src="{{ asset('images/livecafelogo.jpeg') }}" alt="Live Cafe home">
                 </a>
 
                 <div class="auth-tagline">
@@ -235,7 +291,7 @@
                 </div>
 
                 <div class="auth-photo">
-                    <img src="{{ asset('images/running/club-group.jpg') }}" alt="Live Running Club members together after a run">
+                    <img src="{{ asset('images/Coffee.png') }}" alt="Live Running Club members together after a run">
                 </div>
 
                 <span class="auth-badge">Collection only</span>
@@ -243,7 +299,7 @@
         </aside>
 
         <main class="auth-main">
-            <div class="auth-form-wrap">
+            <div class="auth-card">
                 {{ $slot }}
 
                 <p class="auth-back">

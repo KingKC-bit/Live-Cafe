@@ -50,7 +50,7 @@
             </div>
         </form>
 
-        <div class="text-sm text-[#5F5A66]">
+        <div class="auth-note">
             {{ __('No account yet?') }}
             <flux:link :href="route('register')" wire:navigate>{{ __('Create one') }}</flux:link>
         </div>

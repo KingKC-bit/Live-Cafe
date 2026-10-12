@@ -90,7 +90,7 @@
             </flux:button>
         </form>
 
-        <div class="text-sm text-[#5F5A66]">
+        <div class="auth-note">
             Already have an account?
             <flux:link :href="route('login')" wire:navigate>Sign in</flux:link>
         </div>
