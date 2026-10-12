@@ -74,8 +74,13 @@ class ProductManagementController extends Controller
     {
         return [
             'product' => $product,
-            'categories' => Category::orderBy('sort_order')->get(),
+            'categories' => Category::where('is_active', true)
+                ->orWhere('id', $product->category_id)   // keep the current one, even if it was deactivated
+                ->orderBy('sort_order')
+                ->get(),
+
             'ingredients' => Ingredient::orderBy('name')->get(),
+
         ];
     }
 

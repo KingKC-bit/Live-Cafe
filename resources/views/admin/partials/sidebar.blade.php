@@ -11,6 +11,7 @@
             <p class="admin-sidebar-label">Cafe</p>
             <ul>
                 <li><a href="{{ route('admin.products.index') }}">Products</a></li>
+                li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
                 <li><a href="{{ route('admin.inventory.index') }}">Inventory</a></li>
                 <li><a href="{{ route('admin.orders.index') }}">Orders</a></li>
                 <li><a href="{{ route('admin.sales.index') }}">POS Sales</a></li>

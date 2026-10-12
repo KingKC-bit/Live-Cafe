@@ -4,6 +4,7 @@
 
 @section('admin-content')
 <h1>Users</h1>
+<a href="{{ route('admin.users.create') }}">Add staff member</a>
 
 <form method="GET" action="{{ route('admin.users.index') }}">
     <input type="search" name="search" value="{{ request('search') }}" placeholder="Name, surname or email">

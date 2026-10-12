@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AnnouncementManagementController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventManagementController;
 use App\Http\Controllers\Admin\InventoryController;
@@ -28,9 +29,13 @@ Route::prefix('admin')
 
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/stats', [DashboardController::class, 'stats'])->name('stats');
+
+        // Categories
+        Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
 
         // Users
-        Route::resource('users', UserManagementController::class)->except(['create', 'store']);
+        Route::resource('users', UserManagementController::class);
 
         // Products
         Route::resource('products', ProductManagementController::class);
@@ -51,8 +56,6 @@ Route::prefix('admin')
         // Sync conflicts
         Route::get('/sync-conflicts', [SyncConflictController::class, 'index'])->name('sync.index');
         Route::patch('/sync-conflicts/{conflict}', [SyncConflictController::class, 'resolve'])->name('sync.resolve');
-
-        // routes/admin.php
 
         // Events
         Route::resource('events', EventManagementController::class);

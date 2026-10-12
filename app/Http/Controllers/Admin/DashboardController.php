@@ -1,5 +1,7 @@
 <?php
 
+// app/Http/Controllers/Admin/DashboardController.php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -9,24 +11,31 @@ use App\Models\Product;
 use App\Models\Rsvp;
 use App\Models\Sale;
 use App\Models\User;
+use App\Services\Admin\DashboardStatsService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index(): View
+    public function index(DashboardStatsService $statsService): View
     {
-        $stats = [
+        $stats = $statsService->get() + [
             'totalUsers' => User::count(),
             'totalProducts' => Product::count(),
-            'availableProducts' => Product::where('prod_availability', true)
-                ->where('quantity', '>', 0)
+            'availableProducts' => Product::with('ingredients')
+                ->where('prod_availability', true)
+                ->get()
+                ->filter(fn (Product $product) => $product->availableQuantity() > 0)   // made items count from ingredients
                 ->count(),
+            'activeUsers' => DB::table('sessions')
+                ->whereNotNull('user_id')
+                ->where('last_activity', '>=', now()->subMinutes(15)->getTimestamp())
+                ->distinct()
+                ->count('user_id'),
             'ordersToday' => Order::whereDate('created_at', today())
                 ->whereIn('status', ['pending', 'confirmed'])
                 ->count(),
-            'revenueToday' => Sale::whereDate('occurred_at', today())
-                ->where('status', 'confirmed')     // was 'collected', an order status, so always R0
-                ->sum('total'),
             'upcomingEvents' => Event::where('event_date', '>=', now()->toDateString())
                 ->where('event_date', '<=', now()->addDays(30)->toDateString())
                 ->count(),
@@ -44,6 +53,13 @@ class DashboardController extends Controller
             ->take(8)
             ->get();
 
-        return view('admin.dashboard', compact('stats', 'recentOrders', 'recentSales'));
+        $recentRsvps = Rsvp::with(['user', 'event'])->latest()->take(8)->get();
+
+        return view('admin.dashboard', compact('stats', 'recentOrders', 'recentSales', 'recentRsvps'));
+    }
+
+    public function stats(DashboardStatsService $statsService): JsonResponse
+    {
+        return response()->json($statsService->get());
     }
 }

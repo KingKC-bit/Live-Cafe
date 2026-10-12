@@ -167,9 +167,18 @@
     .status-collected { background: #e3f2fd; color: #1565c0; }
     .status-cancelled { background: #fce4e4; color: #b71c1c; }
 
+    .admin-main { min-width: 0; }   /* lets the main column shrink instead of stretching the page */
+
     @media (max-width: 768px) {
         .admin-wrap { grid-template-columns: 1fr; }
         .admin-sidebar { min-height: auto; position: static; }
         .stat-grid { grid-template-columns: repeat(2, 1fr); }
+        .admin-main { padding: 1.5rem 1rem; }
+        .admin-main table { display: block; overflow-x: auto; white-space: nowrap; }   /* wide tables scroll sideways on their own */
+        .adjust-form { flex-wrap: wrap; }
+    }
+
+    @media (max-width: 480px) {
+        .stat-grid { grid-template-columns: 1fr; }
     }
 </style>

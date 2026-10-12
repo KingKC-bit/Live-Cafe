@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Fortify\PasswordValidationRules;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserManagementController extends Controller
 {
+    use PasswordValidationRules;
+
     public function index(Request $request)
     {
         $users = User::query()
@@ -21,6 +25,29 @@ class UserManagementController extends Controller
             ->withQueryString();
 
         return view('admin.users.index', compact('users'));
+    }
+
+    public function create()
+    {
+        return view('admin.users.create');
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:100'],
+            'surname' => ['required', 'string', 'max:100'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'phone_number' => ['required', 'string', 'max:20'],
+            'role' => ['required', 'in:staff,admin'],    // customers still register themselves
+            'password' => $this->passwordRules(),             // required + confirmed
+        ]);
+
+        $user = User::create([...$data, 'password' => Hash::make($data['password'])]);
+        $user->markEmailAsVerified();    // the admin vouches for them, so no email is needed
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "{$user->name} added as {$user->role}. Give them their temporary password in person.");
     }
 
     public function show(User $user)

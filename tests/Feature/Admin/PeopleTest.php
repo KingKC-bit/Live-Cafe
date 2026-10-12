@@ -64,4 +64,25 @@ test('adds a member, deactivates them, and re-adding switches them back on', fun
     ]);
     expect(PartnershipMember::count())->toBe(1)
         ->and($member->fresh()->status)->toBeTrue();
+
+});
+test('lets an admin add a staff member who is verified straight away', function () {
+    $this->actingAs(User::factory()->admin()->create())
+        ->post(route('admin.users.store'), [
+            'name' => 'Thabo', 'surname' => 'Mokoena', 'email' => 'thabo@livecafe.test',
+            'phone_number' => '0821234567', 'role' => 'staff',
+            'password' => 'Cafe-Till#2026a', 'password_confirmation' => 'Cafe-Till#2026a',
+        ])
+        ->assertRedirect(route('admin.users.index'));
+
+    $thabo = User::where('email', 'thabo@livecafe.test')->firstOrFail();
+
+    expect($thabo->role)->toBe('staff')
+        ->and($thabo->hasVerifiedEmail())->toBeTrue();
+});
+
+test('does not let staff add users', function () {
+    $this->actingAs(User::factory()->staff()->create())
+        ->get(route('admin.users.create'))
+        ->assertForbidden();
 });
