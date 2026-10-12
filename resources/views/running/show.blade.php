@@ -2,7 +2,7 @@
 @section('title', 'Event — Live Cafe Running Club')
 @section('content')
 <div style="max-width:1200px;margin:3rem auto;padding:0 2rem;">
-    <a href="{{ route('running.index') }}" style="font-size:0.875rem;color:var(--slate);text-decoration:none;">← Back to events</a>
+    <a href="{{ route('running.index') }}" class="back-link">← Back to events</a>
     <h1 style="font-family:var(--font-display);font-size:2rem;color:var(--green);margin:1.5rem 0 0.5rem;">
         {{ $event->description ?? 'Saturday Run' }}
     </h1>

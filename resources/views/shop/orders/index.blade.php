@@ -6,15 +6,12 @@
 <div class="orders-page">
     <div class="orders-container">
 
-        @if (session('success'))
-            <div class="orders-flash orders-flash-success">{{ session('success') }}</div>
-        @endif
-        @if (session('error'))
-            <div class="orders-flash orders-flash-error">{{ session('error') }}</div>
-        @endif
+<a href="{{ route('shop.index') }}" class="back-link">
+    ← Back to shop
+</a>
 
-        <p class="orders-eyebrow">LIVE CAFE STORE</p>
-        <h1>My orders</h1>
+<p class="orders-eyebrow">LIVE café</p>
+<h1>My orders</h1>
 
         @forelse($orders as $order)
             <a href="{{ route('shop.orders.show', $order) }}" class="order-row">

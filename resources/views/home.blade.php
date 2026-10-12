@@ -366,7 +366,8 @@
     <div class="hero-inner">
         <span class="hero-eyebrow">Sandton's running cafe</span>
         <h1>Coffee, food, and community miles.</h1>
-        <p>Order ahead for collection, join the Saturday running club, and stay connected with everything happening at Live Cafe.</p>
+        <p>Order ahead for collection, join the Saturday running club, and stay connected with everything happening at LIVE café
+.</p>
         <div class="hero-actions">
             <a href="{{ route('shop.index') }}" class="btn-primary">Browse the menu</a>
             <a href="{{ route('running.index') }}" class="btn-outline">Running club</a>
@@ -378,7 +379,7 @@
 <section class="section">
     <div class="container">
         <p class="section-label">What we offer</p>
-        <h2>One place for everything Live Cafe.</h2>
+        <h2>One place for everything LIVE café.</h2>
 
         <div class="feature-grid">
             <div class="feature-card">
@@ -398,7 +399,7 @@
             <div class="feature-card">
                 <div class="feature-card-icon">📣</div>
                 <h3>Announcements</h3>
-                <p>Stay up to date with what's happening at Live Cafe — new products, special events, and club news.</p>
+                <p>Stay up to date with what's happening at LIVE café — new products, special events, and club news.</p>
                 <a href="{{ route('running.announcements.index') }}">Read announcements</a>
             </div>
         </div>
@@ -465,10 +466,9 @@
 {{-- CTA band --}}
 @guest
 <section class="cta-band">
-    <h2>Join the Live Cafe community.</h2>
+    <h2>Join the LIVE café community.</h2>
     <p>Create an account to place orders, RSVP to runs, and track everything in one place.</p>
     <a href="{{ route('register') }}" class="btn-dark">Create an account</a>
 </section>
 @endguest
-
 @endsection

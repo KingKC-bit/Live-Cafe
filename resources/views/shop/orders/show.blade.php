@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <p class="orders-note">Collection only from Live Cafe, Sandton.</p>
+        <p class="orders-note">Collection only from LIVE café, Sandton.</p>
 
         @if(in_array($order->status, ['pending', 'confirmed']))
             <form action="{{ route('shop.orders.cancel', $order) }}" method="POST"
@@ -62,7 +62,7 @@
 
 @push('styles')
 <style>
-    .orders-page { min-height: 70vh; }
+    .orders-page { min-height: 70vh;}
     .orders-container { max-width: 900px; margin: 0 auto; padding: 1.5rem 2rem 4rem; }
     .orders-container h1 { color: var(--green); font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 1.5rem; }
 
@@ -74,8 +74,6 @@
     .status-cancelled { background: #fdecea; color: var(--danger); }
     .status-collected { background: #e6f4ea; color: var(--green); }
 
-    .back-link { display: inline-block; font-size: 0.875rem; color: var(--slate); text-decoration: none; margin-bottom: 1rem; }
-    .back-link:hover { color: var(--green); }
     .order-panel { background: var(--white); border: 1px solid var(--sage); padding: 0.5rem 1.25rem; margin-bottom: 1rem; }
     .order-panel-row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.75rem 0; border-bottom: 1px solid var(--sage); font-size: 0.9rem; }
     .order-panel-row:last-child { border-bottom: none; }

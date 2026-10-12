@@ -8,14 +8,6 @@
 
         <a href="{{ route('shop.index') }}" class="back-link">← Back to menu</a>
 
-        {{-- Flash messages --}}
-        @if (session('success'))
-            <div class="product-flash product-flash-success">{{ session('success') }}</div>
-        @endif
-        @if (session('error'))
-            <div class="product-flash product-flash-error">{{ session('error') }}</div>
-        @endif
-
         <div class="product-layout">
 
             {{-- Image --}}
@@ -73,24 +65,27 @@
 
 @push('styles')
 <style>
-    .product-page { min-height: 70vh; }
+    .product-page { min-height: 70vh; background: #F8E8F0; }
     .product-container { max-width: 1100px; margin: 0 auto; padding: 1.5rem 2rem 4rem; }
 
-    .back-link {
-        display: inline-block;
-        font-size: 0.875rem;
-        color: var(--slate);
-        text-decoration: none;
-        margin-bottom: 1.5rem;
-    }
-    .back-link:hover { color: var(--green); }
-
     .product-flash {
-        padding: 0.85rem 1rem;
-        margin-bottom: 1.5rem;
-        border-radius: 4px;
-        font-size: 0.9rem;
+    padding: 0.85rem 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.product-flash.is-dismissing {
+    animation: dismiss-message 0.5s ease forwards;
+}
+
+@keyframes dismiss-message {
+    to {
+        opacity: 0;
+        transform: translateY(-8px);
+        visibility: hidden;
     }
+}
     .product-flash-success { background: #e6f4ea; color: var(--green); border: 1px solid var(--green); }
     .product-flash-error { background: #fdecea; color: var(--danger); border: 1px solid var(--danger); }
 
@@ -178,5 +173,59 @@
     @media (max-width: 700px) {
         .product-layout { grid-template-columns: 1fr; gap: 1.5rem; }
     }
+
+        /* On page load: the image slides left while the details slide out from behind it */
+    .product-image {
+        z-index: 2;
+        animation: image-slide 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .product-details {
+        position: relative;
+        z-index: 1;
+        animation: details-slide 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    /* Both start in the middle, with the image covering the details */
+    @keyframes image-slide {
+        from { transform: translateX(calc(50% + 1.5rem)); }
+        to   { transform: translateX(0); }
+    }
+
+    @keyframes details-slide {
+        from { transform: translateX(calc(-50% - 1.5rem)); opacity: 0; }
+        to   { transform: translateX(0); opacity: 1; }
+    }
+
+    /* On a phone the columns are stacked, so the details drop down from behind the image */
+    @media (max-width: 700px) {
+        .product-image   { animation: none; }
+        .product-details { animation-name: details-drop; }
+
+        @keyframes details-drop {
+            from { transform: translateY(-2rem); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .product-image, .product-details { animation: none; }
+    }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.flash-wrap .flash').forEach(function (message) {
+        setTimeout(function () {
+            message.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+            message.style.opacity = '0';
+            message.style.transform = 'translateY(-6px)';
+
+            setTimeout(function () {
+                message.remove();
+            }, 250);
+        }, 1500);
+    });
+});
+</script>
 @endpush

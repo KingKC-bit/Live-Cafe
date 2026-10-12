@@ -6,23 +6,15 @@
 <div class="cart-page">
     <div class="cart-container">
 
-        {{-- Flash messages --}}
-        @if (session('success'))
-            <div class="cart-flash cart-flash-success">
-                {{ session('success') }}
-            </div>
-        @endif
+       {{-- Back link --}}
+<a href="{{ route('shop.index') }}" class="back-link">
+    ← Continue shopping
+</a>
 
-        @if (session('error'))
-            <div class="cart-flash cart-flash-error">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        {{-- Page heading --}}
-        <div class="cart-header">
+{{-- Page heading --}}
+<div class="cart-header">
             <div>
-                <p class="cart-eyebrow">LIVE CAFE STORE</p>
+                <p class="cart-eyebrow">LIVE café</p>
                 <h1>Your Cart</h1>
                 <p class="cart-subtitle">
                     Review your items before continuing to checkout.
@@ -66,7 +58,7 @@
                                     >
                                 @else
                                     <div class="cart-item-placeholder">
-                                        Live Cafe
+                                       LIVE café
                                     </div>
                                 @endif
                             </div>
@@ -182,13 +174,6 @@
                         Continue to Checkout
                     </a>
 
-                    <a
-                        href="{{ route('shop.index') }}"
-                        class="continue-shopping"
-                    >
-                        ← Continue shopping
-                    </a>
-
                 </aside>
 
             </div>
@@ -206,7 +191,7 @@
 
                 <p>
                     You haven't added anything to your cart yet.
-                    Browse the Live Cafe store to find something you like.
+                    Browse the LIVE café store to find something you like.
                 </p>
 
                 <a
@@ -229,7 +214,7 @@
 @push('styles')
 <style>
     .cart-page {
-        min-height: 70vh;
+        min-height: 70vh; background: #F8E8F0;
     }
 
     .cart-container {
@@ -525,20 +510,6 @@
 
     .checkout-btn:hover {
         opacity: 0.9;
-    }
-
-    .continue-shopping {
-        display: block;
-        margin-top: 1rem;
-        color: var(--green);
-        text-align: center;
-        text-decoration: none;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-
-    .continue-shopping:hover {
-        text-decoration: underline;
     }
 
     /* Empty cart */

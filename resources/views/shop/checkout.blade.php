@@ -6,15 +6,15 @@
 <div class="checkout-page">
     <div class="checkout-container">
 
-        <div class="checkout-header">
+        <a href="{{ route('shop.cart.index') }}" class="back-link">
+    ← Back to cart
+</a>
+
+<div class="checkout-header">
             <p class="checkout-eyebrow">LIVE café</p>
             <h1>Checkout</h1>
             <p class="checkout-subtitle">Confirm your order and choose a collection time.</p>
         </div>
-
-        @if (session('error'))
-            <div class="checkout-flash checkout-flash-error">{{ session('error') }}</div>
-        @endif
 
         <div class="checkout-layout">
 
@@ -38,7 +38,7 @@
                     @enderror
 
                     <p class="checkout-note">
-                        Orders are collection only from Live Cafe, Sandton. No delivery is available.
+                        Orders are collection only from LIVE café, Sandton. No delivery is available.
                     </p>
                 </form>
             </section>
@@ -69,8 +69,7 @@
                 <button type="submit" form="checkout-form" class="place-order-btn">
                     Place order
                 </button>
-
-                <a href="{{ route('shop.cart.index') }}" class="back-to-cart">← Back to cart</a>
+                
             </aside>
 
         </div>
@@ -81,7 +80,7 @@
 
 @push('styles')
 <style>
-    .checkout-page { min-height: 70vh; }
+    .checkout-page { min-height: 70vh; background: #F8E8F0 }
     .checkout-container { max-width: 1100px; margin: 0 auto; padding: 1.5rem 2rem 4rem; }
 
     .checkout-header { margin-bottom: 2rem; }
@@ -211,17 +210,6 @@
         transition: opacity 0.15s;
     }
     .place-order-btn:hover { opacity: 0.9; }
-
-    .back-to-cart {
-        display: block;
-        margin-top: 1rem;
-        color: var(--green);
-        text-align: center;
-        text-decoration: none;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-    .back-to-cart:hover { text-decoration: underline; }
 
     @media (max-width: 900px) {
         .checkout-layout { grid-template-columns: 1fr; }
