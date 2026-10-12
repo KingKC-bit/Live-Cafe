@@ -294,7 +294,7 @@
                     <img src="{{ asset('images/Coffee.png') }}" alt="Live Running Club members together after a run">
                 </div>
 
-                <span class="auth-badge">Collection only</span>
+                <span class="auth-badge"></span>
             </div>
         </aside>
 
@@ -303,7 +303,7 @@
                 {{ $slot }}
 
                 <p class="auth-back">
-                    <flux:link :href="route('shop.index')">{{ __('Back to the shop') }}</flux:link>
+                    <flux:link :href="route('home')">{{ __('Back to the home page') }}</flux:link>
                 </p>
             </div>
         </main>
