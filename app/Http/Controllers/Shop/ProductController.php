@@ -32,7 +32,7 @@ class ProductController extends Controller
         return view('shop.index', compact('categories', 'productsByCategory'));
     }
 
-        public function show(Product $product): View|RedirectResponse
+    public function show(Product $product): View|RedirectResponse
     {
         // Out-of-stock products have no details page.
         if (! $product->prod_availability || $product->quantity < 1) {

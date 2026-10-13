@@ -23,7 +23,7 @@ class CartController extends Controller
             $product = Product::find($productId);
 
             // Ignore products that no longer exist.
-            if (!$product) {
+            if (! $product) {
                 continue;
             }
 
@@ -51,7 +51,7 @@ class CartController extends Controller
      */
     public function add(Request $request, Product $product): RedirectResponse
     {
-        if (!$product->prod_availability || $product->quantity < 1) {
+        if (! $product->prod_availability || $product->quantity < 1) {
             return back()->with(
                 'error',
                 'That product is currently unavailable.'
@@ -75,7 +75,7 @@ class CartController extends Controller
 
         return back()->with(
             'success',
-            $product->name . ' added to your cart.'
+            $product->name.' added to your cart.'
         );
     }
 
@@ -88,7 +88,7 @@ class CartController extends Controller
             'quantity' => ['required', 'integer', 'min:1'],
         ]);
 
-        if (!$product->prod_availability || $product->quantity < 1) {
+        if (! $product->prod_availability || $product->quantity < 1) {
             return back()->with(
                 'error',
                 'That product is currently unavailable.'
@@ -104,7 +104,7 @@ class CartController extends Controller
 
         $cart = session('cart', []);
 
-        if (!isset($cart[$product->id])) {
+        if (! isset($cart[$product->id])) {
             return back()->with(
                 'error',
                 'That product is not in your cart.'
