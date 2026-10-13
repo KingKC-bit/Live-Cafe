@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -63,7 +64,7 @@ class PosController extends Controller
                     $product->decrement('quantity', $item['quantity']);
                 }
 
-                /** @var \App\Models\User $user */
+                /** @var User $user */
                 $user = auth()->user();
 
                 $sale = Sale::create([
@@ -128,7 +129,7 @@ class PosController extends Controller
 
         $order->load('user', 'orderDetails.product');
 
-        /** @var \App\Models\User $customer */
+        /** @var User $customer */
         $customer = $order->user;
 
         return response()->json([
@@ -139,10 +140,10 @@ class PosController extends Controller
             'collection_time' => Carbon::parse($order->collection_time)->format('H:i, d M'),
             'items' => $order->orderDetails->map(function ($d) {
                 /** @var mixed $d */
-                
-                /** @var \App\Models\Product $product */
+
+                /** @var Product $product */
                 $product = $d->product;
-                
+
                 return [
                     'quantity' => $d->quantity,
                     'product' => $product->name,
