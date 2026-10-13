@@ -30,7 +30,7 @@ class PosController extends Controller
     {
         $request->validate([
             'payment_method' => ['required', 'in:cash,card'],
-            'items'          => ['required', 'string'],
+            'items' => ['required', 'string'],
         ]);
 
         $items = json_decode($request->input('items'), true);
@@ -56,7 +56,7 @@ class PosController extends Controller
 
                     $saleDetails[] = [
                         'product_id' => $product->id,
-                        'quantity'   => $item['quantity'],
+                        'quantity' => $item['quantity'],
                         'unit_price' => $product->price,
                     ];
 
@@ -64,12 +64,12 @@ class PosController extends Controller
                 }
 
                 $sale = Sale::create([
-                    'user_id'        => auth()->user()->id,
+                    'user_id' => auth()->user()->id,
                     'payment_method' => $request->input('payment_method'),
-                    'total'          => $total,
-                    'status'         => 'confirmed',
-                    'is_offline'     => false,
-                    'occurred_at'    => now(),
+                    'total' => $total,
+                    'status' => 'confirmed',
+                    'is_offline' => false,
+                    'occurred_at' => now(),
                 ]);
 
                 foreach ($saleDetails as $detail) {
@@ -126,14 +126,14 @@ class PosController extends Controller
         $order->load('user', 'orderDetails.product');
 
         return response()->json([
-            'id'              => $order->id,
-            'customer'        => $order->user->name.' '.$order->user->surname,
-            'status'          => $order->status,
-            'total'           => number_format($order->total, 2),
+            'id' => $order->id,
+            'customer' => $order->user->name.' '.$order->user->surname,
+            'status' => $order->status,
+            'total' => number_format($order->total, 2),
             'collection_time' => Carbon::parse($order->collection_time)->format('H:i, d M'),
-            'items'           => $order->orderDetails->map(fn ($d) => [
+            'items' => $order->orderDetails->map(fn ($d) => [
                 'quantity' => $d->quantity,
-                'product'  => $d->product->name,
+                'product' => $d->product->name,
             ]),
         ]);
     }
