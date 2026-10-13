@@ -65,7 +65,9 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    // Live Cafe is in Johannesburg, so dates and times are South African time.
+    // The run club's 8-hour RSVP cutoff depends on this.
+    'timezone' => 'Africa/Johannesburg',
 
     /*
     |--------------------------------------------------------------------------
