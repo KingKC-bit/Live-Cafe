@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-<<<<<<< HEAD
             $table->string('name', 100);
             $table->string('surname', 100);
             $table->string('email', 255)->unique();
@@ -25,12 +24,6 @@ return new class extends Migration
                 'admin',
             ])->default('customer');
             $table->string('phone_number', 20);
-=======
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
->>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3
             $table->rememberToken();
             $table->timestamps();
         });

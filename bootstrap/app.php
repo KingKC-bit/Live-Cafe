@@ -1,9 +1,6 @@
 <?php
 
-<<<<<<< HEAD
 use App\Http\Middleware\EnsureUserHasRole;
-=======
->>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -16,13 +13,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-<<<<<<< HEAD
         $middleware->alias([
             'role' => EnsureUserHasRole::class,
         ]);
-=======
-        //
->>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

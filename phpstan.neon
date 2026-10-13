@@ -10,8 +10,4 @@ parameters:
         - database/
         - routes/
 
-<<<<<<< HEAD
     level: 3
-=======
-    level: 7
->>>>>>> 15ff7d93549fad61a193a6918816624dddfac3b3
