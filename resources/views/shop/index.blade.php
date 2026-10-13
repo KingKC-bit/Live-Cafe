@@ -8,9 +8,12 @@
 
     <!-- Hero / Header Section -->
     <header style="margin-bottom: 3rem; text-align: center;">
-        <h1 style="font-family: var(--font-display); font-size: 2.5rem; color: #2ab404; margin-bottom: 0.5rem;">
-            EAT.DRINK.LIVE
-        </h1>
+
+<h1 class="layered-heading">
+    <span class="pink-letter">E</span><span class="green-letters">AT.</span><span class="pink-letter">D</span><span class="green-letters">RINK.</span><span class="pink-letter">L</span><span class="green-letters">IVE</span>
+</h1>
+
+
     </header>
 
     @if (session('error'))
@@ -317,6 +320,19 @@
         .cat-pill:hover::before,
         .cat-pill:focus-visible::before { transform: translateY(0); }
 
+        
+/* Alternate the category hover colours: green, pink, green, pink */
+.cat-nav > .cat-pill:nth-child(4n + 1)::before,
+.cat-nav > .cat-pill:nth-child(4n + 3)::before {
+    background: #2ab404;
+}
+
+.cat-nav > .cat-pill:nth-child(4n + 2)::before,
+.cat-nav > .cat-pill:nth-child(4n + 4)::before {
+    background: #c76f8b;
+}
+
+
         .cat-pill:hover .cat-pill-text,
         .cat-pill:focus-visible .cat-pill-text { transform: translateY(-100%); }
     }
@@ -497,6 +513,40 @@
 
         .section-title, .section-line { transform: none; }
     }
+
+  
+/* Layered print effect for the main shop heading */
+.layered-heading {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 0.5rem;
+    text-shadow:
+        2px 2px 0 #c76f8b,
+        4px 4px 0 #ad5875;
+}
+
+.pink-letter {
+    color: #c76f8b;
+}
+
+.green-letters {
+    color: #2ab404;
+}
+
+
+.layered-heading::before {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    color: #e8a5ba;
+    transform: translate(-2px, -2px);
+    z-index: -1;
+    opacity: 0.65;
+    pointer-events: none;
+}
+
 </style>
 
 <noscript>

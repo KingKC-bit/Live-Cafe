@@ -23,13 +23,14 @@
         border-radius: 50%;
         background: rgba(232, 160, 32, 0.08);
         pointer-events: none;
+        animation: drift 9s ease-in-out infinite alternate;
     }
 
     .hero-inner {
         max-width: 1200px;
         margin: 0 auto;
         position: relative;
-        z-index: 1;
+        z-index: 2;
     }
 
     .hero-eyebrow {
@@ -74,7 +75,7 @@
         font-size: 0.95rem;
         text-decoration: none;
         border-radius: 4px;
-        transition: opacity 0.15s;
+        transition: opacity 0.15s, transform 0.2s;
         font-family: var(--font-body);
     }
 
@@ -88,7 +89,7 @@
         font-size: 0.95rem;
         text-decoration: none;
         border-radius: 4px;
-        transition: border-color 0.15s, background 0.15s;
+        transition: border-color 0.15s, background 0.15s, transform 0.2s;
         font-family: var(--font-body);
     }
 
@@ -141,11 +142,14 @@
         background: var(--white);
         border-top: 3px solid var(--green);
         padding: 2rem;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
     }
 
     .feature-card-icon {
         font-size: 1.8rem;
         margin-bottom: 1rem;
+        display: inline-block;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .feature-card h3 {
@@ -208,7 +212,7 @@
         background: var(--white);
         padding: 1.5rem;
         border-bottom: 3px solid transparent;
-        transition: border-color 0.15s;
+        transition: border-color 0.15s, transform 0.25s ease, box-shadow 0.25s ease;
         text-decoration: none;
         color: inherit;
         display: block;
@@ -270,6 +274,7 @@
     }
 
     .event-item {
+        position: relative;
         background: var(--white);
         padding: 1.25rem 1.5rem;
         display: flex;
@@ -277,6 +282,7 @@
         align-items: center;
         gap: 1rem;
         flex-wrap: wrap;
+        transition: background 0.2s ease;
     }
 
     .event-date {
@@ -338,6 +344,7 @@
     }
 
     .btn-dark {
+        display: inline-block;
         background: var(--green);
         color: var(--white);
         padding: 0.8rem 2rem;
@@ -345,16 +352,282 @@
         font-size: 0.95rem;
         text-decoration: none;
         border-radius: 4px;
-        transition: opacity 0.15s;
+        transition: opacity 0.15s, transform 0.2s;
         font-family: var(--font-body);
     }
 
     .btn-dark:hover { opacity: 0.88; }
 
+    /* ═════════════ Motion and finishing touches ═════════════ */
+
+    /* Hero video slot (for the final version). Add a <video> inside .hero-media. */
+    .hero-media {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    .hero-media video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-media::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--green);
+        opacity: 0.72;
+    }
+
+    /* Hero text rises in one piece at a time when the page loads */
+    .hero-inner > * {
+        opacity: 0;
+        transform: translateY(22px);
+        animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .hero-inner > :nth-child(1) { animation-delay: 0.1s; }
+    .hero-inner > :nth-child(2) { animation-delay: 0.25s; }
+    .hero-inner > :nth-child(3) { animation-delay: 0.4s; }
+    .hero-inner > :nth-child(4) { animation-delay: 0.55s; }
+
+    /* The word "miles" gets underlined as if drawn with a pen */
+    .underline-draw {
+        background-image: linear-gradient(var(--accent), var(--accent));
+        background-repeat: no-repeat;
+        background-position: 0 92%;
+        background-size: 0 0.1em;
+        animation: underline 1s 1.1s ease forwards;
+    }
+
+    /* A running route draws itself across the hero, ending in a pulsing pin */
+    .hero-route {
+        position: absolute;
+        right: 3%;
+        bottom: 8%;
+        width: min(560px, 46vw);
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.6;
+    }
+
+    .route-line {
+        stroke: var(--accent);
+        stroke-width: 2.5;
+        stroke-linecap: round;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: draw 3.2s 0.5s cubic-bezier(0.45, 0, 0.25, 1) forwards;
+    }
+
+    .route-start,
+    .route-end {
+        fill: var(--accent);
+        opacity: 0;
+        animation: pop 0.4s ease forwards;
+    }
+
+    .route-start { animation-delay: 0.5s; }
+    .route-end   { animation-delay: 3.5s; }
+
+    .route-pulse {
+        fill: none;
+        stroke: var(--accent);
+        stroke-width: 2;
+        opacity: 0;
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: ping 2.2s 3.6s ease-out infinite;
+    }
+
+    /* A small "keep scrolling" cue */
+    .scroll-cue {
+        position: absolute;
+        left: 50%;
+        bottom: 1.25rem;
+        z-index: 2;
+        width: 22px;
+        height: 36px;
+        margin-left: -11px;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 12px;
+        opacity: 0;
+        animation: pop 0.6s 2s ease forwards;
+    }
+
+    .scroll-cue span {
+        position: absolute;
+        left: 50%;
+        top: 6px;
+        width: 4px;
+        height: 7px;
+        margin-left: -2px;
+        border-radius: 2px;
+        background: var(--accent);
+        animation: scroll-dot 1.6s ease-in-out infinite;
+    }
+
+    /* Brand ribbon between the hero and the first section */
+    .marquee {
+        background: var(--ink);
+        color: rgba(255, 255, 255, 0.85);
+        overflow: hidden;
+        padding: 0.9rem 0;
+    }
+
+    .marquee-track {
+        display: flex;
+        width: max-content;
+        animation: marquee 34s linear infinite;
+    }
+
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+
+    .marquee-group { display: flex; flex-shrink: 0; }
+
+    .marquee-group span {
+        display: flex;
+        align-items: center;
+        padding: 0 1.5rem;
+        font-family: var(--font-display);
+        font-size: 1.1rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .marquee-group span::after {
+        content: '';
+        width: 6px;
+        height: 6px;
+        margin-left: 3rem;
+        border-radius: 50%;
+        background: var(--accent);
+    }
+
+    .marquee-group .marquee-live { color: var(--accent); }
+
+    /* Section labels get a small accent line that draws in */
+    .section-label::after {
+        content: '';
+        display: block;
+        width: 48px;
+        height: 2px;
+        margin-top: 0.5rem;
+        background: var(--accent);
+        transform-origin: left center;
+        transition: transform 0.9s 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .section-label.reveal::after { transform: scaleX(0); }
+    .section-label.reveal.is-in::after { transform: scaleX(1); }
+
+    /* Scroll reveals: JavaScript adds .reveal, then .is-in when the element comes into view */
+    .reveal { opacity: 0; }
+
+    .reveal.is-in {
+        opacity: 1;
+        animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+        animation-delay: var(--d, 0s);
+    }
+
+    /* Hover effects only on devices that can really hover */
+    @media (hover: hover) {
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-card:hover .feature-card-icon { transform: rotate(-10deg) scale(1.15); }
+
+        .product-tile:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .product-tile-price::after {
+            content: ' →';
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(-6px);
+            transition: opacity 0.2s, transform 0.2s;
+        }
+
+        .product-tile:hover .product-tile-price::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .event-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent);
+            transform: scaleY(0);
+            transition: transform 0.25s ease;
+        }
+
+        .event-item:hover { background: #fbfaf4; }
+        .event-item:hover::before { transform: scaleY(1); }
+
+        .btn-primary:hover,
+        .btn-outline:hover,
+        .btn-dark:hover { transform: translateY(-2px); }
+    }
+
+    @keyframes rise {
+        from { opacity: 0; transform: translateY(22px); }
+        to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes underline { to { background-size: 100% 0.1em; } }
+    @keyframes draw      { to { stroke-dashoffset: 0; } }
+    @keyframes pop       { to { opacity: 1; } }
+    @keyframes drift     { to { transform: translate(-30px, 24px); } }
+    @keyframes marquee   { to { transform: translateX(-50%); } }
+
+    @keyframes ping {
+        0%   { opacity: 0.8; transform: scale(1); }
+        100% { opacity: 0;   transform: scale(3.2); }
+    }
+
+    @keyframes scroll-dot {
+        0%   { opacity: 0; transform: translateY(0); }
+        30%  { opacity: 1; }
+        100% { opacity: 0; transform: translateY(14px); }
+    }
+
+    @media (max-width: 700px) {
+        .hero-route,
+        .scroll-cue { display: none; }
+    }
+
     @media (max-width: 600px) {
         .hero { padding: 4rem 1.25rem 3.5rem; }
         .section { padding: 3.5rem 1.25rem; }
         .event-item { flex-direction: column; align-items: flex-start; }
+    }
+
+    /* People who turn animations off in their system settings see the finished page */
+    @media (prefers-reduced-motion: reduce) {
+        .hero::after,
+        .route-line, .route-start, .route-end, .route-pulse,
+        .scroll-cue, .scroll-cue span,
+        .marquee-track,
+        .underline-draw { animation: none; }
+
+        .hero-inner > * { opacity: 1; transform: none; animation: none; }
+        .underline-draw { background-size: 100% 0.1em; }
+        .route-line { stroke-dashoffset: 0; }
+        .route-start, .route-end, .scroll-cue { opacity: 1; }
+        .route-pulse { display: none; }
+        .feature-card, .product-tile, .feature-card-icon { transition: none; }
     }
 </style>
 @endpush
@@ -363,20 +636,35 @@
 
 {{-- Hero --}}
 <section class="hero">
+
+    {{-- GALLERY (final version): remove this comment and add the cafe video here.
+    <div class="hero-media" aria-hidden="true">
+        <video src="/storage/videos/live-cafe.mp4" autoplay muted loop playsinline></video>
+    </div>
+    --}}
+
+    {{-- A running route that draws itself, ending in a pin (decorative) --}}
+    <svg class="hero-route" viewBox="0 0 600 420" fill="none" aria-hidden="true" focusable="false">
+        <path class="route-line" pathLength="1" d="M10,380 C110,400 150,270 250,285 S390,375 450,255 S540,120 585,70"/>
+        <circle class="route-start" cx="10" cy="380" r="5"/>
+        <circle class="route-pulse" cx="585" cy="70" r="6"/>
+        <circle class="route-end" cx="585" cy="70" r="6"/>
+    </svg>
+
     <div class="hero-inner">
         <span class="hero-eyebrow">Sandton's running cafe</span>
-        <h1>Coffee, food, and community miles.</h1>
-        <p>Order ahead for collection, join the Saturday running club, and stay connected with everything happening at LIVE café
-.</p>
+        <h1>Coffee, food, and community <span class="underline-draw">miles</span>.</h1>
+        <p>Order ahead for collection, join the Saturday running club, and stay connected with everything happening at LIVE café.</p>
         <div class="hero-actions">
             <a href="{{ route('shop.index') }}" class="btn-primary">Browse the menu</a>
             <a href="{{ route('running.index') }}" class="btn-outline">Running club</a>
         </div>
     </div>
+
 </section>
 
 {{-- What we offer --}}
-<section class="section">
+<section class="section" id="offer">
     <div class="container">
         <p class="section-label">What we offer</p>
         <h2>One place for everything LIVE café.</h2>
@@ -442,6 +730,9 @@
             <a href="{{ route('running.index') }}" class="see-all">All events</a>
         </div>
 
+        {{-- MAP (final version): add the route map with the run's meeting points here,
+             for example an OpenStreetMap map using Leaflet, which needs no API key. --}}
+
         <div class="event-row">
             @forelse($upcomingEvents as $event)
                 <div class="event-item">
@@ -471,4 +762,34 @@
     <a href="{{ route('register') }}" class="btn-dark">Create an account</a>
 </section>
 @endguest
+
+{{-- Scroll reveals: adds .reveal to the content, then .is-in when it scrolls into view --}}
+<script>
+(function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+    if (!('IntersectionObserver' in window)) { return; }
+
+    var targets = document.querySelectorAll(
+        '.section-label, .section h2, .section-lead, .feature-card, .product-tile, .event-item, .cta-band > *'
+    );
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-in');
+                observer.unobserve(entry.target);   // plays once
+            }
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+    targets.forEach(function (el) {
+        // Stagger cards and tiles that sit next to each other
+        var index = Array.prototype.indexOf.call(el.parentElement.children, el);
+        el.style.setProperty('--d', (Math.min(index, 5) * 0.08) + 's');
+
+        el.classList.add('reveal');
+        observer.observe(el);
+    });
+})();
+</script>
 @endsection
