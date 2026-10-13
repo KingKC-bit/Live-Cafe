@@ -63,8 +63,11 @@ class PosController extends Controller
                     $product->decrement('quantity', $item['quantity']);
                 }
 
+                /** @var \App\Models\User $user */
+                $user = auth()->user();
+
                 $sale = Sale::create([
-                    'user_id' => auth()->user()->id,
+                    'user_id' => $user->id,
                     'payment_method' => $request->input('payment_method'),
                     'total' => $total,
                     'status' => 'confirmed',
@@ -125,16 +128,26 @@ class PosController extends Controller
 
         $order->load('user', 'orderDetails.product');
 
+        /** @var \App\Models\User $customer */
+        $customer = $order->user;
+
         return response()->json([
             'id' => $order->id,
-            'customer' => $order->user->name.' '.$order->user->surname,
+            'customer' => $customer->name.' '.$customer->surname,
             'status' => $order->status,
             'total' => number_format($order->total, 2),
             'collection_time' => Carbon::parse($order->collection_time)->format('H:i, d M'),
-            'items' => $order->orderDetails->map(fn ($d) => [
-                'quantity' => $d->quantity,
-                'product' => $d->product->name,
-            ]),
+            'items' => $order->orderDetails->map(function ($d) {
+                /** @var mixed $d */
+                
+                /** @var \App\Models\Product $product */
+                $product = $d->product;
+                
+                return [
+                    'quantity' => $d->quantity,
+                    'product' => $product->name,
+                ];
+            }),
         ]);
     }
 
