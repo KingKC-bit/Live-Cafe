@@ -322,6 +322,8 @@
             <ul class="footer-links">
                 <li><a href="{{ route('shop.index') }}">Shop</a></li>
                 <li><a href="{{ route('running.index') }}">Running Club</a></li>
+                <li><a href="{{ route('about') }}">About us</a></li>
+                <li><a href="{{ route('contact') }}">Contact us</a></li>
             </ul>
         </div>
     </footer>

@@ -19,3 +19,15 @@ test('shop page loads', function () {
 test('running club page loads', function () {
     $this->get('/running')->assertOk();
 });
+
+test('about us page loads', function () {
+    $this->get('/about')->assertOk()->assertSee('images/about/cafe-counter.jpg');
+});
+
+test('contact us page loads', function () {
+    $this->get('/contact')->assertOk()->assertSee('Contact us');
+});
+
+test('footer links to about us and contact us', function () {
+    $this->get('/')->assertSee(route('about'))->assertSee(route('contact'));
+});

@@ -22,6 +22,16 @@ class RsvpFactory extends Factory
             'event_id' => Event::factory(),
 
             'extras' => fake()->numberBetween(0, 3),
+
+            'status' => Rsvp::STATUS_GOING,
         ];
+    }
+
+    public function cancelled(): static
+    {
+        return $this->state(fn () => [
+            'status' => Rsvp::STATUS_CANCELLED,
+            'cancelled_at' => now(),
+        ]);
     }
 }

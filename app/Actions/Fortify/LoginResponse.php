@@ -10,8 +10,11 @@ class LoginResponse implements LoginResponseContract
     {
         $user = auth()->user();
 
+        // Admins land on the admin dashboard unless they were on their way to
+        // another page when asked to sign in, such as the run club's
+        // management page at /running/manage.
         if ($user->isAdmin()) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->intended(route('admin.dashboard'));
         }
 
         if ($user->isStaff()) {

@@ -1,9 +1,13 @@
 @props([
     'title',
-    'description',
+    'description' => null,
+    'eyebrow' => __('Your account'),
 ])
 
-<div class="flex w-full flex-col text-center">
-    <flux:heading size="xl" level="1">{{ $title }}</flux:heading>
-    <flux:subheading>{{ $description }}</flux:subheading>
+<div class="flex w-full flex-col gap-2">
+    <p class="auth-kicker">{{ $eyebrow }}</p>
+    <h1 class="auth-title">{{ $title }}</h1>
+    @if ($description)
+        <p class="auth-lead">{{ $description }}</p>
+    @endif
 </div>
