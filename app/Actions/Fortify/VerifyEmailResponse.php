@@ -8,8 +8,8 @@ class VerifyEmailResponse implements VerifyEmailResponseContract
 {
     public function toResponse($request)
     {
-        // Once verified, send standard customers straight to the shop page with a success message!
-        // If they signed up from somewhere else (e.g. a run club RSVP), intended() sends them back there instead.
-        return redirect()->intended(route('shop.index'))->with('success', 'Your email has been successfully verified! Welcome to Live Cafe.');
+        // Return users to their intended destination, or the shop by default.
+        return redirect()->intended(route('shop.index'))
+            ->with('success', 'Your email has been successfully verified! Welcome to LIVE café.');
     }
 }

@@ -123,28 +123,51 @@
         .nav-signout:hover { color: var(--white); }
 
         /* ── Flash messages ── */
-        .flash-wrap {
-            width: 100%;
-            max-width: 1200px;
-            margin: 1rem auto 0;
-            padding: 0 2rem;
-        }
+       
+.flash-wrap {
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: min(90%, 520px);
+    box-sizing: border-box;
+}
 
-        .flash {
-            padding: 0.85rem 1.2rem;
-            border-left: 4px solid;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
+        
+.flash {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+}
+
         .flash-success { border-color: var(--success); background: #edfaf3; color: #1a5c38; }
         .flash-error   { border-color: var(--danger);  background: #fdf0ef; color: #7b1c14; }
         .flash-info    { border-color: var(--accent);  background: #f7faf4; color: #3a5c28; }
 
-        /* ── Main content ── */
-        .main { 
-            flex: 1; 
-            padding: 3rem 0;
-        }
+        
+/* ── Shared Back Links ── */
+.back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    color: var(--slate);
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+}
+
+.back-link:hover {
+    color: var(--green);
+}
+       
+/* ── Main content ── */
+.main {
+    flex: 1;
+    padding: 3rem 0;
+    background: #F8E8F0;
+}
+
 
         /* ── Footer ── */
         .footer {
@@ -223,6 +246,18 @@
                         <li>
                             <a href="{{ route('shop.orders.index') }}" class="{{ request()->is('shop/orders*') ? 'active' : '' }}">My Orders</a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('shop.cart.index') }}" class="{{ request()->is('shop/cart*') ? 'active' : '' }}">
+                                Cart
+                                 @php
+                                 $cartCount = array_sum(session('cart', []));
+                                 @endphp
+                                @if($cartCount > 0)
+                                   ({{ $cartCount }})
+                                @endif
+                            </a>
+                        </li>
                     @endif
 
                     @if(auth()->user()->isStaff())
@@ -293,6 +328,22 @@
         </div>
     </footer>
 
-    @stack('scripts')
+   
+@stack('scripts')
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.flash-wrap').forEach(function (wrapper) {
+            setTimeout(function () {
+                wrapper.style.transition = 'opacity 0.3s ease';
+                wrapper.style.opacity = '0';
+
+                setTimeout(function () {
+                    wrapper.remove();
+                }, 300);
+            }, 1500);
+        });
+    });
+</script>
 </body>
 </html>

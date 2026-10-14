@@ -52,6 +52,8 @@ class Order extends Model
 
     /**
      * An order contains many order details.
+     *
+     * @return HasMany<OrderDetail, $this>
      */
     public function orderDetails(): HasMany
     {

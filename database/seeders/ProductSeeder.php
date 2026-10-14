@@ -210,6 +210,25 @@ class ProductSeeder extends Seeder
                     'Oat Milk' => 0.250,
                 ],
             ],
+
+            [
+                'category' => 'Add On',
+                'name' => 'Collagen',
+                'price' => 15.00,
+                'quantity' => 20,
+                'description' => 'Collagen add-on.',
+                'prod_availability' => true,
+                'ingredients' => [],
+            ],
+            [
+                'category' => 'Add On',
+                'name' => 'Syrup',
+                'price' => 5.00,
+                'quantity' => 20,
+                'description' => 'Syrup add-on.',
+                'prod_availability' => true,
+                'ingredients' => [],
+            ],
         ];
 
         foreach ($products as $data) {

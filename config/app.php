@@ -65,9 +65,8 @@ return [
     |
     */
 
-    // Live Cafe is in Johannesburg, so dates and times are South African time.
-    // The run club's 8-hour RSVP cutoff depends on this.
-    'timezone' => 'Africa/Johannesburg',
+    // Live Cafe uses Johannesburg time for local dates and deadlines.
+    'timezone' => env('APP_TIMEZONE', 'Africa/Johannesburg'),
 
     /*
     |--------------------------------------------------------------------------
