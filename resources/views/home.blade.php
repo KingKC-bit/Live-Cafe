@@ -534,6 +534,160 @@
         animation-delay: var(--d, 0s);
     }
 
+        /* ── Video hero ── */
+    .hero-video {
+        position: relative;
+        min-height: 78vh;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        background: #1d1a1c;
+        color: #fff;
+    }
+
+    .hero-video__media {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    /* Darker on the left, where the words sit, and clearer on the right */
+    .hero-video::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(20, 12, 18, 0.78) 0%, rgba(20, 12, 18, 0.45) 45%, rgba(20, 12, 18, 0.05) 100%);
+    }
+
+    /* Lines up with the rest of the page's content column */
+    .hero-video__inner {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+    }
+
+    .hero-video__text { max-width: 36rem; }
+
+    .hv-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        margin: 0 0 1.4rem;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #DAB4CB;
+    }
+
+    .hv-eyebrow-line {
+        width: 48px;
+        height: 2px;
+        background: #DAB4CB;
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 0.9s 0.1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Each line of the title rises out of its own clipping box, like the shop headings */
+    .hv-title {
+        margin: 0 0 1.25rem;
+        font-family: var(--font-display);
+        font-size: clamp(2.6rem, 6.4vw, 5.4rem);
+        line-height: 1.02;
+        font-weight: 700;
+    }
+
+    .hv-line {
+        display: block;
+        overflow: hidden;
+        padding: 0.16em 0 0.12em;     /* room for the accent on É */
+        margin: -0.16em 0 -0.12em;
+    }
+
+    .hv-line > span {
+        display: inline-block;
+        transform: translateY(115%);
+        transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hv-line:nth-child(2) > span { transition-delay: 0.14s; }
+
+    .hv-title em {
+        font-style: normal;
+        color: #DAB4CB;
+        background-image: linear-gradient(#DAB4CB, #DAB4CB);
+        background-repeat: no-repeat;
+        background-position: 0 94%;
+        background-size: 0 0.06em;
+        transition: background-size 1s 1s ease;     /* the underline draws after the words arrive */
+    }
+
+    .hv-sub {
+        margin: 0 0 2rem;
+        max-width: 30rem;
+        font-size: clamp(1rem, 1.6vw, 1.2rem);
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.88);
+    }
+
+    .hv-fade {
+        opacity: 0;
+        transform: translateY(16px);
+        transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .hv-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.95rem 1.6rem;
+        background: #DAB4CB;
+        color: var(--ink, #1b1b1b);
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .hv-btn span { transition: transform 0.25s ease; }
+
+    /* Everything appears once the video is really playing (the page script adds .is-ready) */
+    .hero-video.is-ready .hv-eyebrow-line { transform: scaleX(1); }
+    .hero-video.is-ready .hv-line > span  { transform: none; }
+    .hero-video.is-ready .hv-title em     { background-size: 100% 0.06em; }
+    .hero-video.is-ready .hv-fade         { opacity: 1; transform: none; transition-delay: 0.55s; }
+    .hero-video.is-ready .hv-eyebrow.hv-fade { transition-delay: 0.05s; }
+    .hero-video.is-ready .hv-fade--2      { transition-delay: 0.75s; }
+
+    @media (hover: hover) {
+        .hv-btn:hover { transform: translateY(-2px); background: #fff; }
+        .hv-btn:hover span { transform: translateX(4px); }
+    }
+
+    @media (max-width: 700px) {
+        .hero-video { min-height: 70vh; align-items: flex-end; }
+        .hero-video::after {
+            background: linear-gradient(0deg, rgba(20, 12, 18, 0.85) 0%, rgba(20, 12, 18, 0.4) 60%, rgba(20, 12, 18, 0.1) 100%);
+        }
+        .hero-video__inner { padding: 3rem 1.25rem 2.5rem; }
+    }
+
+    /* No JavaScript, or animations switched off: just show everything */
+    @media (scripting: none), (prefers-reduced-motion: reduce) {
+        .hv-line > span, .hv-fade, .hv-eyebrow-line { transform: none; opacity: 1; transition: none; }
+        .hv-title em { background-size: 100% 0.06em; transition: none; }
+    }
+
+    
+
+
     /* Hover effects only on devices that can really hover */
     @media (hover: hover) {
         .feature-card:hover {
@@ -636,32 +790,33 @@
 @section('content')
 
 {{-- Hero --}}
-<section class="hero">
 
-    {{-- GALLERY (final version): remove this comment and add the cafe video here.
-    <div class="hero-media" aria-hidden="true">
-        <video src="/storage/videos/live-cafe.mp4" autoplay muted loop playsinline></video>
-    </div>
-    --}}
+<section class="hero-video" id="heroVideo">
+    <video class="hero-video__media" autoplay muted loop playsinline preload="auto"
+           aria-hidden="true" poster="{{ asset('images/hero-poster.jpg') }}">
+        <source src="{{ asset('videos/live-cafe-hero.mp4') }}" type="video/mp4">
+    </video>
 
-    {{-- A running route that draws itself, ending in a pin (decorative) --}}
-    <svg class="hero-route" viewBox="0 0 600 420" fill="none" aria-hidden="true" focusable="false">
-        <path class="route-line" pathLength="1" d="M10,380 C110,400 150,270 250,285 S390,375 450,255 S540,120 585,70"/>
-        <circle class="route-start" cx="10" cy="380" r="5"/>
-        <circle class="route-pulse" cx="585" cy="70" r="6"/>
-        <circle class="route-end" cx="585" cy="70" r="6"/>
-    </svg>
+    <div class="hero-video__inner">
+        <div class="hero-video__text">
+            <p class="hv-eyebrow hv-fade">
+                <span class="hv-eyebrow-line"></span>Live Café · Sandton
+            </p>
 
-    <div class="hero-inner">
-        <span class="hero-eyebrow">Sandton's running cafe</span>
-        <h1>Coffee, food, and community <span class="underline-draw">miles</span>.</h1>
-        <p>Order ahead for collection, join the Saturday running club, and stay connected with everything happening at LIVE café.</p>
-        <div class="hero-actions">
-            <a href="{{ route('shop.index') }}" class="btn-primary">Browse the menu</a>
-            <a href="{{ route('running.index') }}" class="btn-outline">Running club</a>
+            <h1 class="hv-title">
+                <span class="hv-line"><span>MORE THAN</span></span>
+                <span class="hv-line"><span>A <em>CAFÉ.</em></span></span>
+            </h1>
+
+            <p class="hv-sub hv-fade">A place to connect, recharge and move together.</p>
+
+            <div class="hv-fade hv-fade--2">
+                <a href="{{ route('shop.index') }}" class="hv-btn">
+                    Explore the Shop <span aria-hidden="true">→</span>
+                </a>
+            </div>
         </div>
     </div>
-
 </section>
 
 {{-- What we offer --}}
@@ -798,6 +953,37 @@
         el.classList.add('reveal');
         observer.observe(el);
     });
+})();
+</script>
+
+<script>
+(function () {
+    var hero  = document.getElementById('heroVideo');
+    var video = hero && hero.querySelector('video');
+    if (!hero) { return; }
+
+    var shown = false;
+    function show() {
+        if (shown) { return; }
+        shown = true;
+        hero.classList.add('is-ready');
+    }
+
+    if (!video) { show(); return; }
+
+    // The words appear when the video actually starts playing, not while the still image shows.
+    if (!video.paused && video.readyState >= 3) {
+        show();
+    } else {
+        video.addEventListener('playing', show, { once: true });
+    }
+
+    // If the browser blocks autoplay (battery saver, for example), still show the words.
+    var attempt = video.play();
+    if (attempt && attempt.catch) { attempt.catch(show); }
+
+    // And if the video is very slow to load, don't leave the page wordless.
+    setTimeout(show, 4000);
 })();
 </script>
 @endsection
