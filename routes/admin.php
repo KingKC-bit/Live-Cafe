@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AnnouncementManagementController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EventManagementController;
 use App\Http\Controllers\Admin\InventoryController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\PartnershipController;
 use App\Http\Controllers\Admin\ProductManagementController;
 use App\Http\Controllers\Admin\SaleManagementController;
+use App\Http\Controllers\Admin\SyncConflictController;
 use App\Http\Controllers\Admin\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,9 +29,13 @@ Route::prefix('admin')
 
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/stats', [DashboardController::class, 'stats'])->name('stats');
+
+        // Categories
+        Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
 
         // Users
-        Route::resource('users', UserManagementController::class)->except(['create', 'store']);
+        Route::resource('users', UserManagementController::class);
 
         // Products
         Route::resource('products', ProductManagementController::class);
@@ -37,6 +43,7 @@ Route::prefix('admin')
         // Inventory
         Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
         Route::patch('/inventory/{product}/adjust', [InventoryController::class, 'adjust'])->name('inventory.adjust');
+        Route::patch('/inventory/ingredients/{ingredient}/adjust', [InventoryController::class, 'adjustIngredient'])->name('inventory.ingredients.adjust');
 
         // Orders
         Route::resource('orders', OrderManagementController::class)->only(['index', 'show']);
@@ -44,9 +51,16 @@ Route::prefix('admin')
 
         // Sales
         Route::resource('sales', SaleManagementController::class)->only(['index', 'show']);
+        Route::post('/sales/{sale}/void', [SaleManagementController::class, 'void'])->name('sales.void');
+
+        // Sync conflicts
+        Route::get('/sync-conflicts', [SyncConflictController::class, 'index'])->name('sync.index');
+        Route::patch('/sync-conflicts/{conflict}', [SyncConflictController::class, 'resolve'])->name('sync.resolve');
 
         // Events
         Route::resource('events', EventManagementController::class);
+        Route::get('/events/{event}/rsvps', [EventManagementController::class, 'rsvps'])->name('events.rsvps');
+        Route::get('/events/{event}/rsvps.csv', [EventManagementController::class, 'exportRsvps'])->name('events.rsvps.export');
 
         // Announcements
         Route::resource('announcements', AnnouncementManagementController::class);
