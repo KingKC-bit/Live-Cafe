@@ -8,9 +8,7 @@
 
         <a href="{{ route('shop.orders.index') }}" class="back-link">← All orders</a>
 
-        @if (session('success'))
-            <div class="orders-flash orders-flash-success">{{ session('success') }}</div>
-        @endif
+        
         @if (session('error'))
             <div class="orders-flash orders-flash-error">{{ session('error') }}</div>
         @endif
