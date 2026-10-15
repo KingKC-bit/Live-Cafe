@@ -17,7 +17,7 @@
                 @endphp
 
                 @if($image)
-                    <img src="{{ asset('storage/' . $image->path) }}" alt="{{ $image->alt_text ?? $product->name }}">
+                   <img src="{{ asset($image->path) }}" alt="{{ $image->alt_text ?? $product->name }}">
                 @else
                     <div class="product-image-placeholder">Live Cafe</div>
                 @endif

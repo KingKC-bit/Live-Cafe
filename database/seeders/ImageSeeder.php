@@ -11,11 +11,24 @@ class ImageSeeder extends Seeder
 {
     public function run(): void
     {
-        Product::query()->each(function (Product $product): void {
+        $availableImages = [
+            'chicken-wrap',
+            'cappuccino',
+            'blueberry-muffin',
+            'latte',
+        ];
+
+        Product::query()->each(function (Product $product) use ($availableImages): void {
+            $slug = Str::slug($product->name);
+
+            if (! in_array($slug, $availableImages, true)) {
+                return;
+            }
+
             Image::factory()
                 ->forProduct($product)
                 ->create([
-                    'path' => 'products/'.Str::slug($product->name).'.jpg',
+                    'path' => 'images/'.$slug.'.jpg',
                     'alt_text' => $product->name,
                     'sort_order' => 0,
                 ]);
