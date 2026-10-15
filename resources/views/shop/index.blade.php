@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title', 'Shop — Live Cafe')
@@ -50,68 +49,67 @@
                     <h3>LIVE run-club merch coming soon</h3>
                     <p>Something special is on the way.</p>
                 </div>
-           
-@else
-    @php
-        $isVideo = fn ($media) => (bool) preg_match('/\.(mp4|webm)$/i', $media->path);
 
-        $prototypeProducts = $products->filter(function ($product) use ($isVideo) {
-            return $product->images->contains(function ($media) use ($isVideo) {
-                return ! $isVideo($media)
-                    && \Illuminate\Support\Facades\Storage::disk('public')->exists($media->path);
-            });
-        })->take(2);
-    @endphp
-
-    @if ($prototypeProducts->isNotEmpty())
-        <div class="product-grid">
-            @foreach ($prototypeProducts as $product)
+            @else
                 @php
-                    $soldOut = ! $product->prod_availability || $product->quantity < 1;
+                    $isVideo = fn ($media) => (bool) preg_match('/\.(mp4|webm)$/i', $media->path);
 
-                    $photo = $product->images
-                        ->sortBy('sort_order')
-                        ->first(function ($media) use ($isVideo) {
+                    $prototypeProducts = $products->filter(function ($product) use ($isVideo) {
+                        return $product->images->contains(function ($media) use ($isVideo) {
                             return ! $isVideo($media)
-                                && \Illuminate\Support\Facades\Storage::disk('public')->exists($media->path);
+                                && file_exists(public_path($media->path));
                         });
+                    })->take(2);
                 @endphp
 
-                <article class="product-card {{ $soldOut ? 'is-sold-out' : '' }}">
-                    @if ($soldOut)
-                        <div class="product-media">
-                            <img
-                                class="product-media-img"
-                                src="{{ asset('storage/' . $photo->path) }}"
-                                alt="{{ $photo->alt_text ?? $product->name }}"
-                                loading="lazy"
-                            >
-                            <span class="out-badge">Out of stock</span>
-                        </div>
-                    @else
-                        <a
-                            class="product-media"
-                            href="{{ route('shop.product.show', $product->id) }}"
-                            aria-label="View details for {{ $product->name }}"
-                        >
-                            <img
-                                class="product-media-img"
-                                src="{{ asset('storage/' . $photo->path) }}"
-                                alt="{{ $photo->alt_text ?? $product->name }}"
-                                loading="lazy"
-                            >
-                        </a>
-                    @endif
+                @if ($prototypeProducts->isNotEmpty())
+                    <div class="product-grid">
+                        @foreach ($prototypeProducts as $product)
+                            @php
+                                $soldOut = ! $product->prod_availability || $product->quantity < 1;
 
-                    <div class="product-info">
-                        <h3>{{ $product->name }}</h3>
+                                $photo = $product->images
+                                    ->sortBy('sort_order')
+                                    ->first(function ($media) use ($isVideo) {
+                                        return ! $isVideo($media)
+                                            && file_exists(public_path($media->path));
+                                    });
+                            @endphp
+
+                            <article class="product-card {{ $soldOut ? 'is-sold-out' : '' }}">
+                                @if ($soldOut)
+                                    <div class="product-media">
+                                        <img
+                                            class="product-media-img"
+                                            src="{{ asset($photo->path) }}"
+                                            alt="{{ $photo->alt_text ?? $product->name }}"
+                                            loading="lazy"
+                                        >
+                                        <span class="out-badge">Out of stock</span>
+                                    </div>
+                                @else
+                                    <a
+                                        class="product-media"
+                                        href="{{ route('shop.product.show', $product->id) }}"
+                                        aria-label="View details for {{ $product->name }}"
+                                    >
+                                        <img
+                                            class="product-media-img"
+                                            src="{{ asset($photo->path) }}"
+                                            alt="{{ $photo->alt_text ?? $product->name }}"
+                                            loading="lazy"
+                                        >
+                                    </a>
+                                @endif
+
+                                <div class="product-info">
+                                    <h3>{{ $product->name }}</h3>
+                                </div>
+                            </article>
+                        @endforeach
                     </div>
-                </article>
-            @endforeach
-        </div>
-    @endif
-@endif
-
+                @endif
+            @endif
 
         </section>
     @empty
