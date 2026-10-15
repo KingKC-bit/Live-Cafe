@@ -60,11 +60,11 @@ class Event extends Model
      * a coffee tasting.
      */
     private const FALLBACK_PHOTOS = [
-    'images/running/run-pack.jpg',
-    'images/running/run-pink.jpg',
-    'images/running/run-road.jpg',
-    'images/running/crew.jpg',
-];
+        'images/running/run-pack.jpg',
+        'images/running/run-pink.jpg',
+        'images/running/run-road.jpg',
+        'images/running/crew.jpg',
+    ];
 
     protected $fillable = [
         'title',
