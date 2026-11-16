@@ -3,10 +3,9 @@
 @section('title', 'Partnerships — Admin')
 
 @section('admin-content')
-<h1>Partnerships</h1>
 <div class="admin-section-header">
-    <h1>Partnerships</h1>
-    <a href="{{ route('admin.partnerships.create') }}" class="btn">New partnership</a>
+<h1>Partnerships</h1>
+<a href="{{ route('admin.partnerships.create') }}" class="btn">New partnership</a>
 </div>
 <p class="admin-sub">Companies whose staff get the Live Cafe partnership benefit at the till. Open one to add or remove its members.</p>
 

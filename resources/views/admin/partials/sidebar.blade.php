@@ -6,6 +6,7 @@
         <p class="admin-sidebar-label">Overview</p>
         <ul>
             <li><a href="{{ route('admin.dashboard') }}" @class(['active' => request()->routeIs('admin.dashboard')])>Dashboard</a></li>
+            <li><a href="{{ route('admin.reports.index') }}" @class(['active' => request()->routeIs('admin.reports.*')])>Reports</a></li>
         </ul>
     </div>
 
@@ -17,6 +18,8 @@
             <li><a href="{{ route('admin.inventory.index') }}" @class(['active' => request()->routeIs('admin.inventory.*')])>Inventory</a></li>
             <li><a href="{{ route('admin.orders.index') }}" @class(['active' => request()->routeIs('admin.orders.*')])>Orders</a></li>
             <li><a href="{{ route('admin.sales.index') }}" @class(['active' => request()->routeIs('admin.sales.*')])>POS Sales</a></li>
+            <li><a href="{{ route('pos.index') }}" target="_blank" rel="noopener">Open POS till ↗</a></li>
+
             <li>
                 <a href="{{ route('admin.sync.index') }}" @class(['active' => request()->routeIs('admin.sync.*')])>
                     Sync conflicts

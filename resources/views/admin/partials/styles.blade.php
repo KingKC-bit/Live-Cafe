@@ -91,13 +91,12 @@
     /* ── Stat cards ── */
     .stat-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1px;
-        background: var(--admin-line);
         margin-bottom: 3rem;
     }
 
-    .stat-card { background: var(--white); padding: 1.5rem; }
+    .stat-card { background: var(--white); padding: 1.5rem; box-shadow: 0 0 0 1px var(--admin-line); }
 
     .stat-card-label {
         font-size: 0.75rem;
@@ -270,8 +269,16 @@
     .page-item.active .page-link { background: var(--admin-ink); border-color: var(--admin-ink); color: var(--white); }
     .page-item.disabled .page-link { color: #767676; }
 
-    /* ── Phones and tablets ── */
-    @media (max-width: 768px) {
+    /* Tablets and small laptops: the sidebar stays on the left, just narrower */
+    @media (max-width: 1023px) {
+        .admin-wrap { grid-template-columns: 180px 1fr; }
+        .admin-main { padding: 2rem 1.25rem; }
+        .admin-main table:not(:has(thead)) { display: block; overflow-x: auto; }      /* a wide table scrolls inside its own box */
+        .admin-main table:not(:has(thead)) > tbody { display: table; width: 100%; }   /* and a narrow one still fills the width */
+    }
+
+    /* Phones: the sidebar becomes a row of links across the top */
+    @media (max-width: 767px) {
         .admin-wrap { grid-template-columns: 1fr; align-content: start; }   /* align-content stops a gap opening under the menu */
 
         /* the sidebar turns into one row of links that scrolls sideways */
@@ -288,7 +295,7 @@
         .admin-main table { display: block; overflow-x: auto; white-space: nowrap; }   /* wide tables scroll on their own */
         .admin-main table .adjust-form { flex-wrap: nowrap; }   /* forms in a table row stay on one line and scroll with it */
     }
-
+    
     @media (max-width: 480px) {
         .stat-grid { grid-template-columns: 1fr; }
     }
