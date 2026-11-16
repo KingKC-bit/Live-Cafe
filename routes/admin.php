@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\InventoryController;
 use App\Http\Controllers\Admin\OrderManagementController;
 use App\Http\Controllers\Admin\PartnershipController;
 use App\Http\Controllers\Admin\ProductManagementController;
+use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SaleManagementController;
 use App\Http\Controllers\Admin\SyncConflictController;
 use App\Http\Controllers\Admin\UserManagementController;
@@ -30,6 +31,9 @@ Route::prefix('admin')
         // Dashboard
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/stats', [DashboardController::class, 'stats'])->name('stats');
+
+        // Reports
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
         // Categories
         Route::resource('categories', CategoryController::class)->only(['index', 'store', 'update', 'destroy']);
@@ -70,4 +74,5 @@ Route::prefix('admin')
         Route::resource('partnerships', PartnershipController::class);
         Route::post('/partnerships/{partnership}/members', [PartnershipController::class, 'addMember'])->name('partnerships.members.store');
         Route::delete('/partnerships/{partnership}/members/{member}', [PartnershipController::class, 'removeMember'])->name('partnerships.members.destroy');
+
     });
