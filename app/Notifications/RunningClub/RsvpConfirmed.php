@@ -14,7 +14,6 @@ use Illuminate\Notifications\Notification;
  */
 class RsvpConfirmed extends Notification
 {
-
     public function __construct(
         public Event $event,
         public int $extras,
